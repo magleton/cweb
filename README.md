@@ -2,6 +2,7 @@
 
 #环境配置
 * nginx:
+* 
 ```
 location ~ .*\.cgi$ {
     root /home/amcro/www/cgi-bin;
