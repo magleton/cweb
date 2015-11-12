@@ -1,4 +1,4 @@
-# cweb 是一个使用C语言开发的系统。使用mysql作为数据库，基于Ubuntu开发
+# cweb 是一个使用C语言开发WEB的应用。使用mysql作为数据库，基于Ubuntu开发
 
 #环境配置
 nginx:
