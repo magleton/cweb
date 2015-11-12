@@ -24,6 +24,11 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 ```
 
 #编译命令
+* 没有使用MYSQL的编译方法
 ```
 gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c
+```
+* 使用MYSQL的编译方法
+```
+gcc test.c -o test  `mysql_config --cflags --libs`
 ```
