@@ -1,0 +1,34 @@
+<html>
+<head>
+<title><TMPL_var name = "title"></title>
+<link rel="stylesheet" href="../resource/css/style.css" type="text/css"/>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script type="text/javascript" src="../resource/js/main.js"></script>
+</head>
+<body>
+<h1><TMPL_var name = "title"></h1>
+<p>
+<table border=1>
+<tr>
+<th align=right>n</th>
+<th align=right>n!</th>
+</tr>
+<TMPL_LOOP name = "fact">
+    <tr>
+    <td align=right><TMPL_VAR name = "n"></td>
+    <td align=right><TMPL_VAR name = "nfact"></td>
+    </tr>
+</TMPL_LOOP>
+
+</table>
+
+<TMPL_LOOP name = "person">
+    <div style="color:red;">
+    <span align=right><TMPL_VAR name = "n1"></span>
+    <span align=right><TMPL_VAR name = "nfact1"></span>
+    <span style="color:green;" align=right><TMPL_VAR name = "aa"></span>
+    </div>
+</TMPL_LOOP>
+
+</body>
+</html>
