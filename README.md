@@ -2,7 +2,6 @@
 
 #环境配置
 * nginx:
-* 
 ```
 location ~ .*\.cgi$ {
     root /home/amcro/www/cgi-bin;
@@ -12,11 +11,18 @@ location ~ .*\.cgi$ {
 }
 ```
 * 安装mysql客户端库
-* sudo apt-get install libmysqlclient-dev
+```
+sudo apt-get install libmysqlclient-dev
+```
 * 安装fcgiwrap
-* sudo apt-get install fcgiwrap
+```
+sudo apt-get install fcgiwrap
+```
 * 启动fcgiwrap
-* spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
-
+```
+spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
+```
 #编译命令
+```
 gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c
+```
