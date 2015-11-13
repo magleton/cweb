@@ -33,7 +33,7 @@ gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c
 gcc test.c -o test  `mysql_config --cflags --libs`
 ```
 
-* 最后生成CGI文件的命令
+* 最后生成CGI文件的编译命令
 ```
 gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c  `mysql_config --cflags --libs`
 ```
