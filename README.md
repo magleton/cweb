@@ -1,11 +1,11 @@
-# cweb 是一个使用C语言开发WEB的应用。使用mysql作为数据库，基于Ubuntu开发
+# cweb 是一个使用C语言开发的CGI WEB应用。使用mysql作为数据库，基于Ubuntu开发。
 
 #环境配置
 * nginx:
 ```
 location ~ .*\.cgi$ {
     root /home/amcro/www/cgi-bin;
-    fastcgi_pass 127.0.0.1:8080;
+    fastcgi_pass 127.0.0.1:8080
     fastcgi_index index.cgi;
     include fastcgi.conf;
 }
