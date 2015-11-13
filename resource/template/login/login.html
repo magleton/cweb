@@ -1,0 +1,25 @@
+<html>
+<head>
+<title><TMPL_var name = "title"></title>
+<link rel="stylesheet" href="../resource/css/style.css" type="text/css"/>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script type="text/javascript" src="../resource/js/main.js"></script>
+</head>
+<body>
+<h1>Login Page</h1>
+<form action="login.cgi" method="post">
+	<div><span>Username : </span><span><input type="text" name="username" /></span></div>
+	<div><span>Password  : </span><span><input type="password" name="pwd" /></span></div>
+	<div><span>Content  : </span>
+	<textarea name="content"></textarea>
+	</div>
+	<div><input type="submit" name="btn" value="submit"/></div>
+</form>
+<div><TMPL_VAR name="msg" /></div>
+<div><TMPL_VAR name="username" /></div>
+<div><TMPL_VAR name="pwd" /></div>
+<div><TMPL_VAR name="last_ins_id" /></div>
+<div><TMPL_VAR name="content_length" /></div>
+
+</body>
+</html>
