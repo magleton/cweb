@@ -35,5 +35,5 @@ gcc test.c -o test  `mysql_config --cflags --libs`
 
 * 最后生成CGI文件的编译命令
 ```
-gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c  `mysql_config --cflags --libs`
+gcc src/action/login.c -o cgi-bin/login.cgi lib/cgic/cgic.c lib/ctemplate/ctemplate.c src/model/impl/post.c `mysql_config --libs --cflags`
 ```
