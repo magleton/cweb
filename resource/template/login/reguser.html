@@ -1,0 +1,19 @@
+<html>
+<head>
+<title><TMPL_var name = "title"></title>
+<link rel="stylesheet" href="../resource/css/style.css" type="text/css"/>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script type="text/javascript" src="../resource/js/main.js"></script>
+</head>
+<body>
+<h1>用户注册</h1>
+<form action="login.cgi?action=reguser" method="post">
+	<div><span>用户名 : </span><span><input type="text" name="username" /></span></div>
+	<div><span>密码  : </span><span><input type="password" name="pwd" /></span></div>
+	</div>
+	<input type="hidden" name="action" value="reguser"/>
+	<div><input type="submit" name="btn" value="注册"/></div>
+</form>
+<div><TMPL_VAR name="msg" /></div>
+</body>
+</html>
