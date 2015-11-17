@@ -9,7 +9,7 @@
 
 #ifndef SRC_MODEL_INTERFACE_POST_H_
 #define SRC_MODEL_INTERFACE_POST_H_
-const char * executeQuery(char *sql);
+char * executeQuery(char *sql);
 static MYSQL *initMysql();
 int getModelField();
 

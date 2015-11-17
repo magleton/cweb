@@ -33,7 +33,7 @@ int getModelField(const char *tableName, tableField ***table_field) {
 }
 
 //执行SQL语句
-const char * executeQuery(char *sql) {
+char * executeQuery(char *sql) {
 	MYSQL *con = initMysql();
 	if (con) {
 		if (mysql_query(con, "set names utf8")) {
