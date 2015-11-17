@@ -5,7 +5,7 @@
 ```
 location ~ .*\.cgi$ {
     root /home/amcro/www/cgi-bin;
-    fastcgi_pass 127.0.0.1:8080
+    fastcgi_pass 127.0.0.1:8080;
     fastcgi_index index.cgi;
     include fastcgi.conf;
 }
