@@ -9,15 +9,7 @@
 
 #ifndef SRC_MODEL_INTERFACE_POST_H_
 #define SRC_MODEL_INTERFACE_POST_H_
-char * executeQuery(char *sql);
-static MYSQL *initMysql();
-int getModelField();
 
-//存储数据库表结构
-typedef struct _tableField {
-	char *field_name;
-	int field_type;
-	int field_length;
-} tableField;
+
 
 #endif /* SRC_MODEL_INTERFACE_POST_H_ */
