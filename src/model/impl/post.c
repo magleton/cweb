@@ -7,5 +7,3 @@
 #include "../../../lib/cgic/cgic.h"
 #include "../../../lib/ctemplate/ctemplate.h"
 
-
-
