@@ -57,4 +57,11 @@ static int mallocArray(user_data ***ptr, char **field_tables, int field_cnt,
 //释放表单的结构数据
 static void * free_user_data(user_data ***userData, int cnt);
 
+//初始化函数
+void base_init(void);
+//构造函数
+void *base_ctor(base *self);
+//析构函数
+void *base_dtor(base *self);
+
 #endif /* SRC_MODEL_INTERFACE_BASE_H_ */

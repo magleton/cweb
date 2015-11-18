@@ -14,6 +14,28 @@
 #include "../cgic/cgic.h"
 #include "base.h"
 
+klass_info local_base_klass = { base_init };
+klass_info *base_klass = &local_base_klass;
+
+void base_init(void) {
+	if (base_klass->init) {
+		base_klass->init = NULL;
+		base_klass->super = NULL;
+		base_klass->class_name = "base_class";
+		base_klass->size = sizeof(base);
+		base_klass->ctor = base_ctor;
+		base_klass->dtor = base_dtor;
+	}
+}
+
+void *base_ctor(base *self) {
+	return self;
+}
+
+void *base_dtor(base *self) {
+	return self;
+}
+
 int getTableFields(const char *table_name, tableField ***table_field) {
 	tableField **arrayField;
 	MYSQL *con = initMysql();
@@ -67,6 +89,7 @@ const void *insertData(char *table, char **field_tables, int field_cnt) {
 	free(field_name_sql);
 	free(field_value_sql);
 	free(sql);
+	free_user_data(&userData, field_cnt);
 	return __FUNCTION__;
 }
 const void *updateData(char *table, void ***data, void ***where) {
@@ -183,9 +206,4 @@ static void * free_user_data(user_data ***userData, int cnt) {
 	}
 	free(tempData);
 	return "success";
-}
-
-void * getFormData(char **field_tables, int *field_name_length,
-		int *field_value_length) {
-
 }
