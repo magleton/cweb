@@ -42,16 +42,21 @@ void user_init(void) {
  return "success";
  }*/
 
-void user_set_field_value(user *self, char *field_name) {
-	setFieldValue((BASE(self)), field_name);
+void user_set_field_value(user *self, char *field_name, int not_form,
+		char *value) {
+	setFieldValue(BASE(self), field_name, not_form, value);
 }
 
-void user_get_field_value(user *self, char *field_name) {
+user_data *user_get_field_value(user *self, char *field_name) {
 	user_data *current_user_data = getFieldValue((BASE(self)), field_name);
 	if (current_user_data) {
+#ifdef SHOW_FIELD_KEY_VALUE
 		fprintf(cgiOut, "%s = %s<br/>", current_user_data->field_name,
 				current_user_data->field_value);
+#endif
+		return current_user_data;
 	}
+	return NULL;
 }
 
 void *user_ctor(user *self) {
@@ -59,11 +64,12 @@ void *user_ctor(user *self) {
 	(BASE(self))->field_count = 5;
 	(BASE(self))->current = 0;
 	(BASE(self))->user_datas = (user_data **) malloc(sizeof(user_data *) * 5);
+	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * 5);
 	return self;
 }
 
 void *user_dtor(user *self) {
-	base *base_obj = (base *)(((void_fun) (klass_of(self)->super->dtor))(self));
+	(((void_fun) (klass_of(self)->super->dtor))(self));
 	return self;
 }
 

@@ -15,12 +15,13 @@ extern klass_info *user_klass;
 
 typedef struct _user user;
 struct _user {
-	klass_info *klass;
+	base parent;
 };
 
 void user_init(void);
-void user_set_field_value(user *self, char *field_name);
-void user_get_field_value(user *self, char *field_name);
+void user_set_field_value(user *self, char *field_name, int not_form,
+		char *value);
+user_data *user_get_field_value(user *self, char *field_name);
 
 //char *compositeSql1(char *table_name, user *self);
 

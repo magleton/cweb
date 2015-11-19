@@ -40,29 +40,14 @@ static void loginIndex() {
 static void regUser() {
 	if (cgiFormSubmitClicked("btn") == cgiFormSuccess) {
 		char *result = "success";
-		//insertData("user", field_tables, 2);
-		int username_length = 0;
-		int pwd_length = 0;
-		char *username = NULL;
-		char *pwd = NULL;
-		char abc[4096];
-		//cgiFormStringSpaceNeeded("username", &username_length);
-		//cgiFormStringSpaceNeeded("pwd", &pwd_length);
-		//username = (char *)malloc(sizeof(char) * (username_length + 1));
-		//pwd = (char *)malloc(sizeof(char) * (pwd_length + 1));
 		user *user1 = lw_new(user_klass);
-		//cgiFormString("username",username, username_length);
-		//cgiFormString("pwd",pwd, pwd_length);
-		//user_set_field_value(user1, "username");
-		user_set_field_value(user1 , "pwd");
-		//user_get_field_value(user1, "username");
-				user_get_field_value(user1 , "pwd");
-				fprintf(cgiOut , "%s<br/>" , "qqqq");
-		/*user_set_pwd(user1, "pwd");
-		user_set_salt(user1, "saltv");*/
-		//compositeSql1("user",user1 , abc);
+		user_set_field_value(user1, "username", 0, "");
+		user_set_field_value(user1, "pwd", 0, "");
+		user_set_field_value(user1, "salt", 1, "salt");
+		user_get_field_value(user1, "pwd");
+		user_get_field_value(user1, "username");
+		user_get_field_value(user1, "salt");
 		lw_destory(user1);
-		fprintf(cgiOut , "%s" , "hhhhh");
 		TMPL_varlist *varlist;
 		varlist = TMPL_add_var(0, "msg", result, 0);
 		TMPL_write("../resource/template/login/reguser.html", 0, 0, varlist,

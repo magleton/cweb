@@ -34,7 +34,7 @@ struct _base {
 	int field_count;
 	int current;
 	user_data **user_datas;
-	char *field_tables[5];
+	char **field_tables;
 };
 
 //初始化函数
@@ -53,7 +53,7 @@ static void *compositeSql(user_data ***data, char *field_name_sql,
 		char *field_value_sql, int field_cnt, int field_name_length,
 		int field_value_length);
 
-void setFieldValue(base *self, char *field_name);
+void setFieldValue(base *self, char *field_name, int not_form, char *value);
 user_data *getFieldValue(base *self, char *field_name);
 
 #endif /* SRC_MODEL_INTERFACE_BASE_H_ */
