@@ -31,7 +31,7 @@ void *base_ctor(base *self) {
 }
 
 void *base_dtor(base *self) {
-	return NULL;
+	return self;
 }
 
 void setFieldValue(base *self, char *field_name, int not_form, char *value) {
