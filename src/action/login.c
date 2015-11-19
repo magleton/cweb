@@ -6,7 +6,9 @@
 #include <time.h>
 #include "../../lib/cgic/cgic.h"
 #include "../../lib/ctemplate/ctemplate.h"
-#include "../../lib/base/base.h"
+#include "../../lib/oop/lw_new.h"
+#include "../model/interface/user.h"
+#include "../model/interface/base.h"
 
 static void regUser(); //用户注册
 static void login(); //用户登录
@@ -37,9 +39,30 @@ static void loginIndex() {
 
 static void regUser() {
 	if (cgiFormSubmitClicked("btn") == cgiFormSuccess) {
-		char *field_tables[2] = { "username", "pwd" };
 		char *result = "success";
-		insertData("user", field_tables, 2);
+		//insertData("user", field_tables, 2);
+		int username_length = 0;
+		int pwd_length = 0;
+		char *username = NULL;
+		char *pwd = NULL;
+		char abc[4096];
+		//cgiFormStringSpaceNeeded("username", &username_length);
+		//cgiFormStringSpaceNeeded("pwd", &pwd_length);
+		//username = (char *)malloc(sizeof(char) * (username_length + 1));
+		//pwd = (char *)malloc(sizeof(char) * (pwd_length + 1));
+		user *user1 = lw_new(user_klass);
+		//cgiFormString("username",username, username_length);
+		//cgiFormString("pwd",pwd, pwd_length);
+		//user_set_field_value(user1, "username");
+		user_set_field_value(user1 , "pwd");
+		//user_get_field_value(user1, "username");
+				user_get_field_value(user1 , "pwd");
+				fprintf(cgiOut , "%s<br/>" , "qqqq");
+		/*user_set_pwd(user1, "pwd");
+		user_set_salt(user1, "saltv");*/
+		//compositeSql1("user",user1 , abc);
+		lw_destory(user1);
+		fprintf(cgiOut , "%s" , "hhhhh");
 		TMPL_varlist *varlist;
 		varlist = TMPL_add_var(0, "msg", result, 0);
 		TMPL_write("../resource/template/login/reguser.html", 0, 0, varlist,
@@ -112,7 +135,7 @@ static void login() {
 		sprintf(insertSql,
 				"INSERT INTO `post` (`keywords`, `content`) VALUES ('%s', '%s');",
 				username, content);
-		executeQuery(insertSql);
+		//executeQuery(insertSql);
 		varlist = TMPL_add_var(varlist, "msg", "已经提交了哦！！", 0);
 		varlist = TMPL_add_var(varlist, "username", username, 0);
 		varlist = TMPL_add_var(varlist, "pwd", pwd, 0);

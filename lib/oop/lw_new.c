@@ -29,8 +29,7 @@ void *lw_new(void *klass) {
 void lw_destory(void *self) {
 	klass_info *kls = *((klass_info **) self);
 	if (kls) {
-		printf("%s dtor\n", kls->class_name);
 		klass_info *kls = *((klass_info **) self);
-		free(((void_fun) (kls->dtor))(self));
+		free(((void_fun) (kls->dtor))(self));  //????问题
 	}
 }
