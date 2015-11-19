@@ -32,6 +32,10 @@ gcc -o cgi-bin/test.cgi src/test.c lib/cgic/cgic.c lib/ctemplate/ctemplate.c
 ```
 gcc test.c -o test  `mysql_config --cflags --libs`
 ```
+* 最后生成CGI文件的编译命令,开启调试模式
+```
+gcc -o cgi-bin/login.cgi -DDEBUG src/model/impl/base.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/action/login.c src/model/impl/user.c `mysql_config --libs --cflags`
+```
 
 * 最后生成CGI文件的编译命令
 ```
