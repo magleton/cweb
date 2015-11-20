@@ -43,10 +43,14 @@ static void regUser() {
 		user *user1 = lw_new(user_klass);
 		char created_time[11] = { 0 };
 		char updated_time[11] = { 0 };
+		//char *salt ="abcghto";
+		//char *dest_salt = random_string(salt);
 		tostring(created_time, time(NULL));
 		tostring(updated_time, time(NULL));
+		//fprintf(cgiOut , "<h3 style='color:red;'>%s</h3>" , salt);
 		user_set_field_value(user1, "username", 0, "", FIELD_STRING);
 		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING);
+		//user_set_field_value(user1, "salt", 1, dest_salt, FIELD_STRING);
 		user_set_field_value(user1, "salt", 1, "salt", FIELD_STRING);
 		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT);
 		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT);

@@ -156,3 +156,28 @@ void tostring(char str[], int num) {
 	}
 	str[len] = '\0';
 }
+
+char *random_string(char *dest) {
+	size_t len = 0;
+	char *p = dest;
+	int three_in_a_row = 0;
+	int arr[128] = { 0x0 };
+	if (!srand_called) {
+		srandom(time(NULL));
+		srand_called = 1;
+	}
+	for (len = 6 + rand() % 3; len; len--, p++) {
+		char *q = dest;
+		*p = (rand() % 2) ? rand() % 26 + 97 : rand() % 10 + 48;
+		p[1] = 0x0;
+		arr[*p]++;
+		if (arr[*p] == 3) {
+			for (q = dest; q[2] > 0 && !three_in_a_row; q++)
+				if (*q == q[1] && q[1] == q[2])
+					three_in_a_row = 1;
+		}
+		if (three_in_a_row || arr[*p] > 3)
+			return random_string(dest);
+	}
+	return dest;
+}

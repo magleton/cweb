@@ -62,4 +62,8 @@ const void *insertData1(base *base, char *table);
 //转换数字到字符串
 void tostring(char str[], int num);
 
+//生成随机字符串
+static int srand_called=0;
+char *random_string(char *dest);
+
 #endif /* SRC_MODEL_INTERFACE_BASE_H_ */
