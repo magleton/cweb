@@ -58,7 +58,7 @@ void setFieldValue(base *self, char *field_name, int not_form, char *value,
 //获取相应表单的值
 form_data *getFieldValue(base *self, char *field_name);
 //插入SQL的组合
-const void *insertData1(base *base, char *table);
+int insertData(base *base, char *table);
 //转换数字到字符串
 void tostring(char str[], int num);
 

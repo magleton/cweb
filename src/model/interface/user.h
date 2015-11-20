@@ -23,10 +23,7 @@ void user_set_field_value(user *self, char *field_name, int not_form,
 		char *value , field_type type);
 form_data *user_get_field_value(user *self, char *field_name);
 
-void *user_ctor(user *user);
-void *user_dtor(user *user);
-
-static void setFieldValue1(user *self, char *field_name);
-static form_data *getFieldValue1(user *self, char *field_name);
+void *user_ctor(user *self);
+void *user_dtor(user *self);
 
 #endif /* SRC_MODEL_INTERFACE_USER_H_ */

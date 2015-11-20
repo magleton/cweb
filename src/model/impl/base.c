@@ -38,6 +38,7 @@ void *base_dtor(base *self) {
 void setFieldValue(base *self, char *field_name, int not_form, char *value,
 		field_type type) {
 	int length = 0;
+	int name_length = strlen(field_name);
 	if (not_form) {
 		length = sizeof(value);
 	} else {
@@ -47,11 +48,11 @@ void setFieldValue(base *self, char *field_name, int not_form, char *value,
 	self->form_datas[self->current]->field_value = (char *) malloc(
 			sizeof(char) * (length + 1));
 	self->form_datas[self->current]->field_value_length = length;
+	fprintf(cgiOut , "%s length %ld" , field_name , strlen(field_name));
 	self->form_datas[self->current]->field_name = (char *) malloc(
-			sizeof(char) * (strlen(field_name) + 10));
-	strncpy(self->form_datas[self->current]->field_name, field_name,
-			strlen(field_name));
-	self->form_datas[self->current]->field_name_length = strlen(field_name);
+			sizeof(char) * (name_length + 1));
+	strncpy(self->form_datas[self->current]->field_name, field_name  ,name_length + 1);
+	self->form_datas[self->current]->field_name_length = name_length;
 	if (not_form) {
 		strcpy(self->form_datas[self->current]->field_value, value);
 	} else {
@@ -63,10 +64,11 @@ void setFieldValue(base *self, char *field_name, int not_form, char *value,
 	strncpy(self->field_tables[self->current], field_name,
 			strlen(field_name) + 1);
 #ifdef DEBUG
-	fprintf(cgiOut, " <h1>file = %s , %s = %s </h1>",
+	fprintf(cgiOut, " <h1>file = %s , %s = %s , origin = %s</h1>",
 			__FILE__,
 			self->field_tables[self->current],
-			self->form_datas[self->current]->field_value
+			self->form_datas[self->current]->field_name,
+			field_name
 	);
 #endif
 	self->current++;
@@ -89,10 +91,10 @@ static void *compositeSql(base *parent, char *field_name_sql,
 	char *comma = ",";
 	char *left_brackets = "(";
 	char *right_brackets = "";
-	char temp_name_sql[2048] = { 0 };
-	char temp_value_sql[2048] = { 0 };
-	char tmp_name[2048] = { 0 };
-	char tmp_value[2048] = { 0 };
+	char temp_name_sql[1024] = { 0 };
+	char temp_value_sql[1024] = { 0 };
+	char tmp_name[512] = { 0 };
+	char tmp_value[512] = { 0 };
 	for (i = 0; i < parent->field_count; ++i) {
 		if (++k == parent->field_count) {
 			comma = "";
@@ -106,19 +108,20 @@ static void *compositeSql(base *parent, char *field_name_sql,
 		sprintf(tmp_value, "%s'%s'%s%s", left_brackets,
 				parent->form_datas[i]->field_value, comma, right_brackets);
 		//fprintf(cgiOut , "%s , %s" , tmp_name,tmp_value);
+		fprintf(cgiOut , "<span style='color:green;'>%s</span>" , parent->field_tables[i]);
 		strcat(temp_name_sql, tmp_name);
 		strcat(temp_value_sql, tmp_value);
 	}
 	strcpy(field_name_sql, temp_name_sql);
 	strcpy(field_value_sql, temp_value_sql);
-	//fprintf(cgiOut , "%s , %s" , field_name_sql,field_value_sql);
+	fprintf(cgiOut , "%s , %s" , field_name_sql,field_value_sql);
 	return "success";
 }
 
-const void *insertData1(base *parent, char *table) {
+int insertData(base *parent, char *table) {
 	MYSQL *conn = initMysql();
-	char field_name_sql[2048] = { 0 };
-	char field_value_sql[2048] = { 0 };
+	char field_name_sql[1048] = { 0 };
+	char field_value_sql[1048] = { 0 };
 	int field_name_length = 0;
 	int field_value_length = 0;
 	char *insert = "INSERT INTO";
@@ -129,15 +132,18 @@ const void *insertData1(base *parent, char *table) {
 	if (conn) {
 		if (mysql_query(conn, "set names utf8")) {
 			fprintf(cgiOut, "%s", mysql_error(conn));
-			return mysql_error(conn);
+			return 2;
+			//return mysql_error(conn);
 		}
 		if (mysql_query(conn, sql)) {
 			fprintf(cgiOut, "%s", mysql_error(conn));
-			return mysql_error(conn);
+			return 2;
+			//return mysql_error(conn);
 		}
 	}
+	int last_id = mysql_insert_id(conn);
 	fprintf(cgiOut, "%s", sql);
-	return __FUNCTION__;
+	return last_id;
 }
 
 //转换数字到字符串

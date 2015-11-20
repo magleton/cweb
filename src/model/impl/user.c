@@ -29,18 +29,6 @@ void user_init(void) {
 	}
 }
 
-/*char *compositeSql1(char *table_name, user *self, char *sql) {
- char tempSql[4096] = { 0 };
- fprintf(cgiOut, "%s , %s , %s \n", user_get_username(self),
- user_get_pwd(self), user_get_salt(self));
- int i, k = 0;
- char *comma = ",";
- char *left_brackets = "(";
- char *right_brackets = "";
- sql = "";
- strcpy(sql, tempSql);
- return "success";
- }*/
 
 void user_set_field_value(user *self, char *field_name , int not_form,
 		char *value , field_type type) {
