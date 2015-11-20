@@ -10,8 +10,8 @@ extern klass_info *dog_klass;
 typedef struct _dog dog;
 
 struct _dog {
-  animal base;
-  int age;
+	animal base;
+	int age;
 };
 
 int dog_get_age(dog *self);

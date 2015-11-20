@@ -6,9 +6,9 @@ extern klass_info *animal_klass;
 
 typedef struct _animal animal;
 struct _animal {
-  klass_info *klass;
-  char name[256];
-  int weight;
+	klass_info *klass;
+	char name[256];
+	int weight;
 };
 
 char *animal_get_name(animal *self);

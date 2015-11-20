@@ -35,7 +35,7 @@ void lw_destory(void *self) {
 		free(((void_fun) (kls->dtor))(self));
 		self = NULL;
 #ifdef DEBUG
-		fprintf(cgiOut , "%s" , "aaaaaaaaa");
+		fprintf(cgiOut , "%s" , kls->class_name);
 #endif
 	}
 }

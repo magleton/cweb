@@ -13,6 +13,7 @@
 #include <mysql.h>
 #include "../oop/lw_new.h"
 
+typedef struct _tableField tableField;
 //存储数据库表结构
 struct _tableField {
 	char *field_name;
@@ -21,15 +22,10 @@ struct _tableField {
 };
 
 int getTableFields(const char *table, tableField ***table_field);
-const void *insertData(char *table, char **field_tables, int field_cnt);
-const void *updateData(char *table, void ***data, void ***where);
-const void *deleteData(char *table, void ***where);
-const void *selectData(char *table, void ***fields, void ***where);
 
 //初始化数据库链接
-static MYSQL *initMysql();
+MYSQL *initMysql();
 //执行SQL语句
 const char * executeQuery(char *sql);
-
 
 #endif /* LIB_BASE_CMYSQL_H_ */

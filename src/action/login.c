@@ -47,6 +47,8 @@ static void regUser() {
 		user_get_field_value(user1, "pwd");
 		user_get_field_value(user1, "username");
 		user_get_field_value(user1, "salt");
+		insertData1(BASE(user1), "user");
+		//fprintf(cgiOut , "<h3 style='color:red;'>%s</h3> VALUES  %s" , field_name_sql,field_value_sql);
 		lw_destory(user1);
 		TMPL_varlist *varlist;
 		varlist = TMPL_add_var(0, "msg", result, 0);
@@ -60,48 +62,6 @@ static void regUser() {
 	}
 
 }
-
-//处理用户注册
-/*static void regUser1() {
- if (cgiFormSubmitClicked("btn") == cgiFormSuccess) {
- int pwd_len = 0;
- int username_len = 0;
- int created_time = time(NULL);
- int updated_time = time(NULL);
- char salt[20] = "user_salt";
- tableField **table_field = NULL;
- int i, field_cnt = 0;
- cgiFormStringSpaceNeeded("username", &username_len);
- cgiFormStringSpaceNeeded("pwd", &pwd_len);
- char *username = (char *) malloc(sizeof(char) * (username_len + 1));
- char *pwd = (char *) malloc(sizeof(char) * (pwd_len + 1));
- cgiFormString("username", username, username_len);
- cgiFormString("pwd", pwd, pwd_len);
- field_cnt = getModelField("user", &table_field);
- char insertSql[1024] = { 0 };
- sprintf(insertSql,
- "INSERT INTO `user` (`username`, `pwd`, `salt`, `created_time`, `updated_time`) VALUES ('%s', '%s', '%s', '%d', '%d');",
- username, pwd, salt, created_time, updated_time);
- executeQuery(insertSql);
- /*for (i = 0; i < field_cnt; i++) {
- fprintf(cgiOut,
- "FieldCnt= %d FieldName =%s FieldType=%d FieldLength=%d<br/>",
- field_cnt, table_field[i]->field_name,
- table_field[i]->field_type, table_field[i]->field_length);
- }
- free(table_field);*\
-		TMPL_varlist *varlist;
- varlist = TMPL_add_var(0, "msg", insertSql, 0);
- TMPL_write("../resource/template/login/reguser.html", 0, 0, varlist,
- cgiOut, cgiOut);
- } else {
- TMPL_varlist *varlist;
- varlist = TMPL_add_var(0, "msg", "", 0);
- TMPL_write("../resource/template/login/reguser.html", 0, 0, varlist,
- cgiOut, cgiOut);
- }
-
- }*/
 
 //处理用户登录
 static void login() {

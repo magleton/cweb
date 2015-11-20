@@ -17,12 +17,11 @@
 #define BASE(_object_) ((base *)_object_)
 
 typedef struct _base base;
-typedef struct _tableField tableField;
-typedef struct _user_data user_data;
+typedef struct _form_data form_data;
 extern klass_info *base_klass;
 
-// 用户业务数据
-struct _user_data {
+// 用户表单数据结构
+struct _form_data {
 	char *field_name;
 	char *field_value;
 	int field_name_length;
@@ -33,7 +32,7 @@ struct _base {
 	klass_info *klass;
 	int field_count;
 	int current;
-	user_data **user_datas;
+	form_data **form_datas;
 	char **field_tables;
 };
 
@@ -43,17 +42,16 @@ void base_init(void);
 void *base_ctor(base *self);
 //析构函数
 void *base_dtor(base *self);
-//为表单字段分配内存
-static int mallocArray(user_data ***ptr, char **field_tables, int field_cnt,
-		int *field_name_length, int *field_value_length);
-//释放表单的结构数据
-static void * free_user_data(user_data ***userData, int cnt);
 //将表单数据组合成SQL语句
-static void *compositeSql(user_data ***data, char *field_name_sql,
-		char *field_value_sql, int field_cnt, int field_name_length,
-		int field_value_length);
-
+static void *compositeSql(base *parent, char *field_name_sql,
+		char *field_value_sql);
+//为表单字段分配内存空间
 void setFieldValue(base *self, char *field_name, int not_form, char *value);
-user_data *getFieldValue(base *self, char *field_name);
+//获取相应表单的值
+form_data *getFieldValue(base *self, char *field_name);
+//插入SQL的组合
+const void *insertData1(base *base, char *table);
+
+//组合INSERT语句
 
 #endif /* SRC_MODEL_INTERFACE_BASE_H_ */

@@ -39,49 +39,8 @@ int getTableFields(const char *table_name, tableField ***table_field) {
 	return field_cnt;
 }
 
-const void *insertData(char *table, char **field_tables, int field_cnt) {
-	MYSQL *conn = initMysql();
-	user_data **userData;
-	int field_name_length = 0;
-	int field_value_length = 0;
-	char *insert = "INSERT INTO";
-	mallocArray(&userData, field_tables, field_cnt, &field_name_length,
-			&field_value_length);
-	char *field_name_sql = (char *) malloc(
-			sizeof(char) * (field_name_length + 20));
-	char *field_value_sql = (char *) malloc(
-			sizeof(char) * (field_value_length + 20));
-	char *sql = (char *) malloc(field_value_length + field_name_length + 100);
-	compositeSql(&userData, field_name_sql, field_value_sql, field_cnt,
-			field_name_length, field_value_length);
-	sprintf(sql, "%s `%s` %s VALUES %s; ", insert, table, field_name_sql,
-			field_value_sql);
-	if (conn) {
-		if (mysql_query(conn, "set names utf8")) {
-			return mysql_error(conn);
-		}
-		if (mysql_query(conn, sql)) {
-			return mysql_error(conn);
-		}
-	}
-	free(field_name_sql);
-	free(field_value_sql);
-	free(sql);
-	free_user_data(&userData, field_cnt);
-	return __FUNCTION__;
-}
-const void *updateData(char *table, void ***data, void ***where) {
-	return __FUNCTION__;
-}
-const void *deleteData(char *table, void ***where) {
-	return __FUNCTION__;
-}
-const void *selectData(char *table, void ***fields, void ***where) {
-	return __FUNCTION__;
-}
-
 //初始化MYSQL实例
-static MYSQL *initMysql() {
+MYSQL *initMysql() {
 	MYSQL *conn = mysql_init(0);
 	if (conn == NULL) {
 		return NULL;

@@ -15,10 +15,11 @@
 int cgiMain() {
 	cgiHeaderContentType("text/html;charset=gbk");
 	user *user1 = lw_new(user_klass);
-	user_set_username(user1 , "macro chen");
-	user_set_pwd(user1 , "111111");
+	user_set_username(user1, "macro chen");
+	user_set_pwd(user1, "111111");
 	user_set_salt(user1, "aabbcc");
-	fprintf(cgiOut , "%s , %s , %s \n" , user_get_username(user1) , user_get_pwd(user1) , user_get_salt(user1));
+	fprintf(cgiOut, "%s , %s , %s \n", user_get_username(user1),
+			user_get_pwd(user1), user_get_salt(user1));
 	lw_destory(user1);
 	return 0;
 }

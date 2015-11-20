@@ -21,14 +21,12 @@ struct _user {
 void user_init(void);
 void user_set_field_value(user *self, char *field_name, int not_form,
 		char *value);
-user_data *user_get_field_value(user *self, char *field_name);
-
-//char *compositeSql1(char *table_name, user *self);
+form_data *user_get_field_value(user *self, char *field_name);
 
 void *user_ctor(user *user);
 void *user_dtor(user *user);
 
 static void setFieldValue1(user *self, char *field_name);
-static user_data *getFieldValue1(user *self, char *field_name);
+static form_data *getFieldValue1(user *self, char *field_name);
 
 #endif /* SRC_MODEL_INTERFACE_USER_H_ */
