@@ -23,15 +23,14 @@ void *lw_new(void *klass) {
 	if (kls->init) {
 		((init_fun) (kls->init))();
 	}
-	void *p = malloc(kls->size);
-	*((klass_info **) p) = kls;
-	return ((void_fun) (kls->ctor))(p);
+	void *obj = malloc(kls->size);
+	*((klass_info **) obj) = kls;
+	return ((void_fun) (kls->ctor))(obj);
 }
 
 void lw_destory(void *self) {
 	klass_info *kls = *((klass_info **) self);
 	if (kls) {
-		klass_info *kls = *((klass_info **) self);
 		free(((void_fun) (kls->dtor))(self));
 		self = NULL;
 #ifdef DEBUG

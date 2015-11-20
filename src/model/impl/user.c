@@ -42,9 +42,9 @@ void user_init(void) {
  return "success";
  }*/
 
-void user_set_field_value(user *self, char *field_name, int not_form,
-		char *value) {
-	setFieldValue(BASE(self), field_name, not_form, value);
+void user_set_field_value(user *self, char *field_name , int not_form,
+		char *value , field_type type) {
+	setFieldValue(BASE(self), field_name, not_form, value , type);
 }
 
 form_data *user_get_field_value(user *self, char *field_name) {
@@ -61,10 +61,10 @@ form_data *user_get_field_value(user *self, char *field_name) {
 
 void *user_ctor(user *self) {
 	((void_fun) (klass_of(self)->super->ctor))(self);
-	(BASE(self))->field_count = 3;
+	(BASE(self))->field_count = 5;
 	(BASE(self))->current = 0;
-	(BASE(self))->form_datas = (form_data **) malloc(sizeof(form_data *) * 3);
-	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * 3);
+	(BASE(self))->form_datas = (form_data **) malloc(sizeof(form_data *) * 5);
+	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * 5);
 	return self;
 }
 

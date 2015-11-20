@@ -35,7 +35,8 @@ void *base_dtor(base *self) {
 	return self;
 }
 
-void setFieldValue(base *self, char *field_name, int not_form, char *value) {
+void setFieldValue(base *self, char *field_name, int not_form, char *value,
+		field_type type) {
 	int length = 0;
 	if (not_form) {
 		length = sizeof(value);
@@ -47,10 +48,10 @@ void setFieldValue(base *self, char *field_name, int not_form, char *value) {
 			sizeof(char) * (length + 1));
 	self->form_datas[self->current]->field_value_length = length;
 	self->form_datas[self->current]->field_name = (char *) malloc(
-			sizeof(char) * (sizeof(field_name) + 1));
+			sizeof(char) * (strlen(field_name) + 10));
 	strncpy(self->form_datas[self->current]->field_name, field_name,
-			sizeof(field_name));
-	self->form_datas[self->current]->field_name_length = sizeof(field_name);
+			strlen(field_name));
+	self->form_datas[self->current]->field_name_length = strlen(field_name);
 	if (not_form) {
 		strcpy(self->form_datas[self->current]->field_value, value);
 	} else {
@@ -58,13 +59,15 @@ void setFieldValue(base *self, char *field_name, int not_form, char *value) {
 				length);
 	}
 	self->field_tables[self->current] = (char *) malloc(
-			sizeof(char) * (sizeof(field_name) + 10));
-	strncpy(self->field_tables[self->current], field_name, sizeof(field_name));
+			sizeof(char) * (strlen(field_name) + 10));
+	strncpy(self->field_tables[self->current], field_name,
+			strlen(field_name) + 1);
 #ifdef DEBUG
-	fprintf(cgiOut, " <h1>field = %s , self->field_tables[%d] = %s , %p</h1>",
-			self->form_datas[self->current]->field_value, self->current,
+	fprintf(cgiOut, " <h1>file = %s , %s = %s </h1>",
+			__FILE__,
 			self->field_tables[self->current],
-			self->field_tables[self->current]);
+			self->form_datas[self->current]->field_value
+	);
 #endif
 	self->current++;
 }
@@ -108,6 +111,7 @@ static void *compositeSql(base *parent, char *field_name_sql,
 	}
 	strcpy(field_name_sql, temp_name_sql);
 	strcpy(field_value_sql, temp_value_sql);
+	//fprintf(cgiOut , "%s , %s" , field_name_sql,field_value_sql);
 	return "success";
 }
 
@@ -124,12 +128,31 @@ const void *insertData1(base *parent, char *table) {
 			field_value_sql);
 	if (conn) {
 		if (mysql_query(conn, "set names utf8")) {
+			fprintf(cgiOut, "%s", mysql_error(conn));
 			return mysql_error(conn);
 		}
 		if (mysql_query(conn, sql)) {
+			fprintf(cgiOut, "%s", mysql_error(conn));
 			return mysql_error(conn);
 		}
 	}
 	fprintf(cgiOut, "%s", sql);
 	return __FUNCTION__;
+}
+
+//转换数字到字符串
+void tostring(char str[], int num) {
+	int i, rem, len = 0, n;
+
+	n = num;
+	while (n != 0) {
+		len++;
+		n /= 10;
+	}
+	for (i = 0; i < len; i++) {
+		rem = num % 10;
+		num = num / 10;
+		str[len - (i + 1)] = rem + '0';
+	}
+	str[len] = '\0';
 }

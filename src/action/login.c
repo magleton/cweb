@@ -41,12 +41,20 @@ static void regUser() {
 	if (cgiFormSubmitClicked("btn") == cgiFormSuccess) {
 		char *result = "success";
 		user *user1 = lw_new(user_klass);
-		user_set_field_value(user1, "username", 0, "");
-		user_set_field_value(user1, "pwd", 0, "");
-		user_set_field_value(user1, "salt", 1, "salt");
+		char created_time[11] = { 0 };
+		char updated_time[11] = { 0 };
+		tostring(created_time, time(NULL));
+		tostring(updated_time, time(NULL));
+		user_set_field_value(user1, "username", 0, "", FIELD_STRING);
+		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING);
+		user_set_field_value(user1, "salt", 1, "salt", FIELD_STRING);
+		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT);
+		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT);
 		user_get_field_value(user1, "pwd");
 		user_get_field_value(user1, "username");
 		user_get_field_value(user1, "salt");
+		user_get_field_value(user1, "created_time");
+		user_get_field_value(user1, "updated_time");
 		insertData1(BASE(user1), "user");
 		//fprintf(cgiOut , "<h3 style='color:red;'>%s</h3> VALUES  %s" , field_name_sql,field_value_sql);
 		lw_destory(user1);

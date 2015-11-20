@@ -14,6 +14,11 @@
 #include "../cgic/cgic.h"
 #include "cmysql.h"
 
+#define CMYSQL_HOST "127.0.0.1"
+#define CMYSQL_USERNAME "root"
+#define CMYSQL_PWD "root"
+#define CMYSQL_DBNAME "test"
+
 int getTableFields(const char *table_name, tableField ***table_field) {
 	tableField **arrayField;
 	MYSQL *con = initMysql();
@@ -45,8 +50,9 @@ MYSQL *initMysql() {
 	if (conn == NULL) {
 		return NULL;
 	}
-	if (mysql_real_connect(conn, "localhost", "root", "root", "test", 0,
-	NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, CMYSQL_HOST, CMYSQL_USERNAME, CMYSQL_PWD,
+			CMYSQL_DBNAME, 0,
+			NULL, 0) == NULL) {
 		return NULL;
 	}
 	return conn;
