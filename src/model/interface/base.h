@@ -18,13 +18,20 @@
 
 typedef struct _base base;
 typedef struct _form_data form_data;
+typedef struct _field_where field_where;
 extern klass_info *base_klass;
 
-typedef enum _field_type field_type;
 //数据类型
 enum _field_type {
-	FIELD_STRING = 1, FIELD_INT = 2 , FIELD_FLOAT = 3
+	FIELD_STRING = 1, // 字符串类型
+	FIELD_INT = 2, //整数类型
+	FIELD_FLOAT = 3, //浮点数类型
+	FIELD_DELETE = 100, //该数据表单用于组合成删除语句的条件
+	FIELD_UPDATE = 101, //该数据表单用于组合成更新语句的条件
+	FIELD_SELECT = 102 //该数据表单用于组合成选择语句的条件
 };
+
+typedef enum _field_type field_type;
 
 // 用户表单数据结构
 struct _form_data {
@@ -32,9 +39,10 @@ struct _form_data {
 	char *field_value;
 	int field_name_length;
 	int field_value_length;
-	int field_type;
+	int field_type;  //该字段的作用
 };
 
+//框架基础结构
 struct _base {
 	klass_info *klass;
 	int field_count;
@@ -49,21 +57,36 @@ void base_init(void);
 void *base_ctor(base *self);
 //析构函数
 void *base_dtor(base *self);
-//将表单数据组合成SQL语句
-static void *compositeSql(base *parent, char *field_name_sql,
+//将表单数据组合成插入SQL语句
+static void *compositeInsertSql(base *parent, char *field_name_sql,
 		char *field_value_sql);
+//将表单数据组合成删除SQL语句
+static void * compositeDeteleSql(base *parent, char *field_where_sql);
+//将表单数据组合成选择SQL语句
+static void * compositeSelectSql(base *parent, char *field_select_sql, char *field_where_sql,
+		int field_cnt, int where_cnt);
+static void * compositeDeteleSql(base *parent, char *field_where_sql);
+//将表单数据组合成更新SQL语句
+static void * compositeUpdateSql(base *parent, char *field_update_sql, char *field_where_sql,
+		int field_cnt, int where_cnt);
 //为表单字段分配内存空间
 void setFieldValue(base *self, char *field_name, int not_form, char *value,
 		field_type type);
 //获取相应表单的值
 form_data *getFieldValue(base *self, char *field_name);
-//插入SQL的组合
+//插入SQL语句的组合
 int insertData(base *base, char *table);
+//删除SQL语句的组合
+int deleteData(base *base, char *table);
+//更新SQL语句的组合
+int updateData(base *base, char *table , int field_cnt , int where_cnt);
+//选择SQL语句的组合
+int selectData(base *base, char *table , int field_cnt , int where_cnt);
 //转换数字到字符串
 void tostring(char str[], int num);
 
 //生成随机字符串
-static int srand_called=0;
+static int srand_called = 0;
 char *random_string(char *dest);
 
 #endif /* SRC_MODEL_INTERFACE_BASE_H_ */
