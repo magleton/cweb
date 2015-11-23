@@ -31,8 +31,8 @@ void user_init(void) {
 
 
 void user_set_field_value(user *self, char *field_name , int not_form,
-		char *value , field_type type) {
-	setFieldValue(BASE(self), field_name, not_form, value , type);
+		char *value , field_type type , field_mark mark) {
+	setFieldValue(BASE(self), field_name, not_form, value , type , mark);
 }
 
 form_data *user_get_field_value(user *self, char *field_name) {

@@ -45,39 +45,43 @@ static void regUser() {
 		//post *post1 = lw_new(post_klass);
 		char created_time[11] = { 0 };
 		char updated_time[11] = { 0 };
+		char tfloat[20] = {0};
 		char origin_salt[20] = { 0 };
 		char *salt = random_string(origin_salt);
 		int user_id = 0;
 		char user_id_str[11];
-		tostring(created_time, 1448001658);
-		tostring(updated_time,1448001658);
-
-		user_set_field_value(user1, "username", 1, "aaa", FIELD_STRING);
-		user_set_field_value(user1, "pwd", 1, "dddd", FIELD_STRING);
-		user_set_field_value(user1, "salt", 1, "sa7hi7", FIELD_STRING);
-		user_set_field_value(user1, "created_time", 1, created_time, FIELD_SELECT);
-		user_set_field_value(user1, "updated_time", 1, updated_time , FIELD_SELECT);
-/*		user_get_field_value(user1, "pwd");
+		//tostring(created_time, time(NULL));
+		tostring(updated_time, time(NULL));
+		fprintf(cgiOut , "<div style='color:red'>%s</div>" , tfloat);
+		snprintf(created_time , sizeof(created_time) , "%ld" , time(NULL));
+		user_set_field_value(user1, "username", 0, "", FIELD_STRING ,FIELD_INSERT);
+		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING ,FIELD_INSERT);
+		user_set_field_value(user1, "salt", 1, salt, FIELD_STRING , FIELD_INSERT);
+		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
+				FIELD_INSERT);
+		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,
+				FIELD_INSERT);
+		/*user_get_field_value(user1, "pwd");
 		user_get_field_value(user1, "username");
 		user_get_field_value(user1, "salt");
 		user_get_field_value(user1, "created_time");
-		user_get_field_value(user1, "updated_time");
-		user_id = insertData(BASE(user1), "user"); *///插入操作
-		deleteData(BASE(user1) , "user"); //删除操作
+		user_get_field_value(user1, "updated_time");*/
+		user_id = insertData(BASE(user1), "user");  //插入操作
+		//deleteData(BASE(user1), "user"); //删除操作
 		//selectData(BASE(user1) , "user" , 3 , 2); //选择操作
 		//updateData(BASE(user1) , "user" , 3 , 2); //选择操作
 		//tostring(user_id_str, user_id);
 		/*post_set_field_value(post1, "user_id", 1, user_id_str, FIELD_STRING);
-		post_set_field_value(post1, "title", 1, "你好", FIELD_STRING);
-		post_set_field_value(post1, "content", 1, "这个是内容", FIELD_STRING);
-		post_set_field_value(post1, "created_time", 1, created_time, FIELD_INT);
-		post_set_field_value(post1, "updated_time", 1, updated_time, FIELD_INT);
-		insertData(BASE(post1), "post");
-		post_get_field_value(post1, "user_id");
-		post_get_field_value(post1, "title");
-		post_get_field_value(post1, "content");
-		post_get_field_value(post1, "created_time");
-		post_get_field_value(post1, "updated_time");*/
+		 post_set_field_value(post1, "title", 1, "你好", FIELD_STRING);
+		 post_set_field_value(post1, "content", 1, "这个是内容", FIELD_STRING);
+		 post_set_field_value(post1, "created_time", 1, created_time, FIELD_INT);
+		 post_set_field_value(post1, "updated_time", 1, updated_time, FIELD_INT);
+		 insertData(BASE(post1), "post");
+		 post_get_field_value(post1, "user_id");
+		 post_get_field_value(post1, "title");
+		 post_get_field_value(post1, "content");
+		 post_get_field_value(post1, "created_time");
+		 post_get_field_value(post1, "updated_time");*/
 		//fprintf(cgiOut , "<h3 style='color:red;'>%s</h3> VALUES  %s" , field_name_sql,field_value_sql);
 		//lw_destory(user1);
 		lw_destory(user1);

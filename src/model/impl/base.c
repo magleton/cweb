@@ -10,6 +10,7 @@
 #include <string.h>
 #include <my_global.h>
 #include <mysql.h>
+#include <math.h>
 #include "../interface/base.h"
 #include "../../../lib/base/cmysql.h"
 
@@ -35,17 +36,18 @@ void *base_dtor(base *self) {
 	return self;
 }
 
-void setFieldValue(base *self, char *field_name, int not_form, char *value,
-		field_type type) {
+void setFieldValue(base *self, char *field_name, int not_form, void *value,
+		field_type type, field_mark mark) {
 	int length = 0;
 	int name_length = strlen(field_name);
 	if (not_form) {
-		length = sizeof(value);
+		length = strlen(value);
 	} else {
 		cgiFormStringSpaceNeeded(field_name, &length);
 	}
 	self->form_datas[self->current] = (form_data*) malloc(sizeof(form_data));
 	self->form_datas[self->current]->field_type = type;
+	self->form_datas[self->current]->field_mark = mark;
 	self->form_datas[self->current]->field_value = (char *) malloc(
 			sizeof(char) * (length + 1));
 	self->form_datas[self->current]->field_value_length = length;
@@ -147,7 +149,7 @@ static void *compositeSelectSql(base *parent, char *field_select_sql,
 	char *and = " AND ";
 	char *comma = ",";
 	for (i = 0; i < parent->field_count; i++) {
-		if (parent->form_datas[i]->field_type == FIELD_SELECT) {
+		if (parent->form_datas[i]->field_mark == FIELD_SELECT) {
 			if (++where_k == where_cnt) {
 				and = "";
 			}
@@ -177,7 +179,7 @@ static void * compositeUpdateSql(base *parent, char *field_update_sql,
 	char *and = " AND ";
 	char *comma = ",";
 	for (i = 0; i < parent->field_count; i++) {
-		if (parent->form_datas[i]->field_type == FIELD_UPDATE) {
+		if (parent->form_datas[i]->field_mark == FIELD_UPDATE) {
 			if (++where_k == where_cnt) {
 				and = "";
 			}
