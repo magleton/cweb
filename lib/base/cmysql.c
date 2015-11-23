@@ -58,16 +58,38 @@ MYSQL *initMysql() {
 	return conn;
 }
 
-//执行SQL语句
-const char * executeQuery(char *sql) {
+//执行SQL语句(增加，删除，更新)
+const char * executeQueryWithoutResult(char *sql) {
 	MYSQL *con = initMysql();
 	if (con) {
 		if (mysql_query(con, "set names utf8")) {
-			return mysql_error(con);
+			finish_with_error(con);
 		}
 		if (mysql_query(con, sql)) {
-			return mysql_error(con);
+			finish_with_error(con);
 		}
 	}
 	return "executeQuery";
+}
+
+//执行SQL语句(查询)
+MYSQL * executeQueryWithResult(char *sql) {
+	MYSQL *con = initMysql();
+	if (con) {
+		if (mysql_query(con, "set names utf8")) {
+			finish_with_error(con);
+		}
+		if (mysql_query(con, sql)) {
+			finish_with_error(con);
+		}
+	}
+	return con;
+}
+
+//显示错误
+void finish_with_error(MYSQL *con)
+{
+  fprintf(cgiOut, "%s\n", mysql_error(con));
+  mysql_close(con);
+  exit(1);
 }

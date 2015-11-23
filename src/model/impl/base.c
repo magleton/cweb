@@ -212,18 +212,7 @@ int insertData(base *parent, char *table) {
 	compositeInsertSql(parent, field_name_sql, field_value_sql);
 	sprintf(sql, "%s `%s` %s VALUES %s; ", insert, table, field_name_sql,
 			field_value_sql);
-	if (conn) {
-		if (mysql_query(conn, "set names utf8")) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-		if (mysql_query(conn, sql)) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-	}
+	executeQueryWithoutResult(sql);
 	int last_id = mysql_insert_id(conn);
 	fprintf(cgiOut, "%s", sql);
 	return last_id;
@@ -238,44 +227,37 @@ int deleteData(base *base, char *table) {
 	compositeDeteleSql(base, field_where);
 	sprintf(sql, "%s `%s` where %s", delete, table, field_where);
 	fprintf(cgiOut, "%s", sql);
-	if (conn) {
-		if (mysql_query(conn, "set names utf8")) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-		if (mysql_query(conn, sql)) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-	}
+	executeQueryWithoutResult(sql);
 	return 1;
 }
 
 //组合选择语句
 int selectData(base *base, char *table, int field_cnt, int where_cnt) {
-	MYSQL *conn = initMysql();
+	MYSQL *conn = NULL;
 	char *select = "SELECT ";
 	char field_select[1024] = { 0 };
 	char field_where[1024] = { 0 };
 	char sql[1024] = { 0 };
+	int i;
 	compositeSelectSql(base, field_select, field_where, field_cnt, where_cnt);
 	sprintf(sql, "%s  %s FROM `%s` WHERE %s", select, field_select, table,
 			field_where);
 	fprintf(cgiOut, "%s", sql);
-	if (conn) {
-		if (mysql_query(conn, "set names utf8")) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-		if (mysql_query(conn, sql)) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
+	conn = executeQueryWithResult(sql);
+	MYSQL_RES *result = mysql_store_result(conn);
+	if (result == NULL) {
+		finish_with_error(conn);
 	}
+	int num_fields = mysql_num_fields(result);
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(result))) {
+		for (i = 0; i < num_fields; i++) {
+			printf("%s ", row[i] ? row[i] : "NULL");
+		}
+		printf("\n");
+	}
+	mysql_free_result(result);
+	mysql_close(conn);
 	return 1;
 }
 
@@ -290,18 +272,7 @@ int updateData(base *base, char *table, int field_cnt, int where_cnt) {
 	sprintf(sql, "%s  `%s`  SET  %s  WHERE %s", update, table, field_select,
 			field_where);
 	fprintf(cgiOut, "%s", sql);
-	if (conn) {
-		if (mysql_query(conn, "set names utf8")) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-		if (mysql_query(conn, sql)) {
-			fprintf(cgiOut, "%s", mysql_error(conn));
-			return 2;
-			//return mysql_error(conn);
-		}
-	}
+	executeQueryWithoutResult(sql);
 	return 1;
 }
 
