@@ -29,10 +29,11 @@ enum _field_type {
 };
 
 enum _field_mark {
-	FIELD_INSERT = 0, //正常
-	FIELD_DELETE = 100, //该数据表单用于组合成删除语句的条件
-	FIELD_UPDATE = 101, //该数据表单用于组合成更新语句的条件
-	FIELD_SELECT = 102 //该数据表单用于组合成选择语句的条件
+	FIELD_NORMAL = 0, //正常
+	FIELD_INSERT = 100, //插入
+	FIELD_DELETE = 101, //该数据表单用于组合成删除语句的条件
+	FIELD_UPDATE = 102, //该数据表单用于组合成更新语句的条件
+	FIELD_SELECT = 103 //该数据表单用于组合成选择语句的条件
 };
 
 typedef enum _field_type field_type;

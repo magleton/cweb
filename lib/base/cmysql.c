@@ -40,7 +40,7 @@ int getTableFields(const char *table_name, tableField ***table_field) {
 			i++;
 		}
 	}
-	fprintf(cgiOut, "%d", field_cnt);
+	//fprintf(cgiOut, "%d", field_cnt);
 	*table_field = arrayField;
 	return field_cnt;
 }

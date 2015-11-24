@@ -23,17 +23,16 @@ void user_init(void) {
 		memcpy(user_klass, base_klass, sizeof(klass_info));
 		user_klass->super = base_klass;
 		user_klass->class_name = "user_klass";
-		user_klass->field_numbers = 5;
+		//user_klass->field_numbers = 5;
 		user_klass->size = sizeof(user);
 		user_klass->ctor = user_ctor;
 		user_klass->dtor = user_dtor;
 	}
 }
 
-
-void user_set_field_value(user *self, char *field_name , int not_form,
-		char *value , field_type type , field_mark mark) {
-	setFieldValue(BASE(self), field_name, not_form, value , type , mark);
+void user_set_field_value(user *self, char *field_name, int not_form,
+		char *value, field_type type, field_mark mark) {
+	setFieldValue(BASE(self), field_name, not_form, value, type, mark);
 }
 
 form_data *user_get_field_value(user *self, char *field_name) {
@@ -50,11 +49,12 @@ form_data *user_get_field_value(user *self, char *field_name) {
 
 void *user_ctor(user *self) {
 	((void_fun) (klass_of(self)->super->ctor))(self);
-	fprintf(cgiOut,"<h1 style='color:red;'>%d</h1>" , user_klass->field_numbers);
-	(BASE(self))->field_count = user_klass->field_numbers;
+	//(BASE(self))->field_count = user_klass->field_numbers;
 	(BASE(self))->current = 0;
-	(BASE(self))->form_datas = (form_data **) malloc(sizeof(form_data *) * user_klass->field_numbers);
-	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * user_klass->field_numbers);
+	(BASE(self))->form_datas = (form_data **) malloc(
+			sizeof(form_data *) * user_klass->field_numbers);
+	(BASE(self))->field_tables = (char **) malloc(
+			sizeof(char *) * user_klass->field_numbers);
 	return self;
 }
 

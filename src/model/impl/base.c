@@ -52,7 +52,7 @@ void setFieldValue(base *self, char *field_name, int not_form, void *value,
 	self->form_datas[self->current]->field_value = (char *) malloc(
 			sizeof(char) * (length + 1));
 	self->form_datas[self->current]->field_value_length = length;
-	fprintf(cgiOut, "%s length %ld", field_name, strlen(field_name));
+	//fprintf(cgiOut, "%s length %ld", field_name, strlen(field_name));
 	self->form_datas[self->current]->field_name = (char *) malloc(
 			sizeof(char) * (name_length + 1));
 	strncpy(self->form_datas[self->current]->field_name, field_name,
@@ -100,8 +100,8 @@ static void *compositeInsertSql(base *parent, char *field_name_sql,
 	char temp_value_sql[1024] = { 0 };
 	char tmp_name[512] = { 0 };
 	char tmp_value[512] = { 0 };
-	for (i = 0; i < parent->field_count; ++i) {
-		if (++k == parent->field_count) {
+	for (i = 0; i < parent->current; ++i) {
+		if (++k == parent->current) {
 			comma = "";
 			right_brackets = ")";
 		}
@@ -113,14 +113,16 @@ static void *compositeInsertSql(base *parent, char *field_name_sql,
 		sprintf(tmp_value, "%s'%s'%s%s", left_brackets,
 				parent->form_datas[i]->field_value, comma, right_brackets);
 		//fprintf(cgiOut , "%s , %s" , tmp_name,tmp_value);
-		fprintf(cgiOut, "<span style='color:green;'>%s</span>",
-				parent->field_tables[i]);
+		/*fprintf(cgiOut, "<span style='color:green;'>%d</span>",
+		 parent->current);*/
 		strcat(temp_name_sql, tmp_name);
 		strcat(temp_value_sql, tmp_value);
 	}
 	strcpy(field_name_sql, temp_name_sql);
 	strcpy(field_value_sql, temp_value_sql);
+#if SHOW_SQL
 	fprintf(cgiOut, "%s , %s", field_name_sql, field_value_sql);
+#endif
 	return "success";
 }
 
@@ -129,15 +131,17 @@ static void *compositeDeteleSql(base *parent, char *field_where_sql) {
 	char tmp_where[1024] = { 0 };
 	int i, k = 0;
 	char *and = " AND ";
-	for (i = 0; i < parent->field_count; ++i) {
-		if (++k == parent->field_count) {
+	for (i = 0; i < parent->current; ++i) {
+		if (++k == parent->current) {
 			and = "";
 		}
 		sprintf(tmp_where, "`%s`= '%s'%s", parent->form_datas[i]->field_name,
 				parent->form_datas[i]->field_value, and);
 		strcat(field_where_sql, tmp_where);
 	}
-	//fprintf(cgiOut, "%s", field_where_sql);
+#if SHOW_SQL
+	fprintf(cgiOut, "%s", field_where_sql);
+#endif
 	return "success";
 }
 
@@ -149,7 +153,7 @@ static void *compositeSelectSql(base *parent, char *field_select_sql,
 	int i, field_k = 0, where_k = 0;
 	char *and = " AND ";
 	char *comma = ",";
-	for (i = 0; i < parent->field_count; i++) {
+	for (i = 0; i < parent->current; i++) {
 		if (parent->form_datas[i]->field_mark == FIELD_SELECT) {
 			if (++where_k == where_cnt) {
 				and = "";
@@ -169,6 +173,9 @@ static void *compositeSelectSql(base *parent, char *field_select_sql,
 			strcat(field_select_sql, tmp_select);
 		}
 	}
+#if SHOW_SQL
+	fprintf(cgiOut, "%s  , %s", field_where_sql , field_select_sql);
+#endif
 	return "success";
 }
 
@@ -179,7 +186,7 @@ static void * compositeUpdateSql(base *parent, char *field_update_sql,
 	int i, field_k = 0, where_k = 0;
 	char *and = " AND ";
 	char *comma = ",";
-	for (i = 0; i < parent->field_count; i++) {
+	for (i = 0; i < parent->current; i++) {
 		if (parent->form_datas[i]->field_mark == FIELD_UPDATE) {
 			if (++where_k == where_cnt) {
 				and = "";
@@ -200,6 +207,9 @@ static void * compositeUpdateSql(base *parent, char *field_update_sql,
 			strcat(field_update_sql, tmp_select);
 		}
 	}
+#if SHOW_SQL
+	fprintf(cgiOut, "%s  , %s", field_where_sql , field_update_sql);
+#endif
 	return "success";
 }
 
