@@ -7,6 +7,7 @@
 #include "../../lib/cgic/cgic.h"
 #include "../../lib/ctemplate/ctemplate.h"
 #include "../../lib/oop/lw_new.h"
+#include "../../lib/base/cmysql.h"
 #include "../model/interface/user.h"
 #include "../model/interface/post.h"
 #include "../model/interface/base.h"
@@ -45,27 +46,41 @@ static void regUser() {
 		//post *post1 = lw_new(post_klass);
 		char created_time[11] = { 0 };
 		char updated_time[11] = { 0 };
-		char tfloat[20] = {0};
+		char tfloat[20] = { 0 };
 		char origin_salt[20] = { 0 };
 		char *salt = random_string(origin_salt);
 		int user_id = 0;
 		char user_id_str[11];
 		//tostring(created_time, time(NULL));
 		tostring(updated_time, time(NULL));
-		fprintf(cgiOut , "<div style='color:red'>%s</div>" , tfloat);
-		snprintf(created_time , sizeof(created_time) , "%ld" , time(NULL));
-		user_set_field_value(user1, "username", 0, "", FIELD_STRING ,FIELD_INSERT);
-		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING ,FIELD_INSERT);
-		user_set_field_value(user1, "salt", 1, salt, FIELD_STRING , FIELD_INSERT);
+		tableField **table_field;
+		int i, field_cnt = 0;
+		field_cnt = getTableFields("user", &table_field); //获取表的信息
+		for (i = 0; i < field_cnt; ++i) {
+			if (strcmp(table_field[i]->field_name, "id")) { //排除掉ID字段
+				fprintf(cgiOut,
+						"field_cnt= %d Field =%s Type=%d Length=%d<br/>",
+						field_cnt, table_field[i]->field_name,
+						table_field[i]->field_type,
+						table_field[i]->field_length);
+			}
+		}
+		fprintf(cgiOut, "<div style='color:red'>%s</div>", tfloat);
+		snprintf(created_time, sizeof(created_time), "%ld", time(NULL));
+		user_set_field_value(user1, "username", 0, "", FIELD_STRING,
+				FIELD_INSERT);
+		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING, FIELD_INSERT);
+		user_set_field_value(user1, "salt", 1, salt, FIELD_STRING,
+				FIELD_INSERT);
 		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
 				FIELD_INSERT);
 		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,
 				FIELD_INSERT);
 		/*user_get_field_value(user1, "pwd");
-		user_get_field_value(user1, "username");
-		user_get_field_value(user1, "salt");
-		user_get_field_value(user1, "created_time");
-		user_get_field_value(user1, "updated_time");*/
+		 user_get_field_value(user1, "username");
+		 user_get_field_value(user1, "salt");
+		 user_get_field_value(user1, "created_time");
+		 user_get_field_value(user1, "updated_time");*/
 		user_id = insertData(BASE(user1), "user");  //插入操作
 		//deleteData(BASE(user1), "user"); //删除操作
 		//selectData(BASE(user1) , "user" , 3 , 2); //选择操作

@@ -23,6 +23,7 @@ void user_init(void) {
 		memcpy(user_klass, base_klass, sizeof(klass_info));
 		user_klass->super = base_klass;
 		user_klass->class_name = "user_klass";
+		user_klass->field_numbers = 5;
 		user_klass->size = sizeof(user);
 		user_klass->ctor = user_ctor;
 		user_klass->dtor = user_dtor;
@@ -49,10 +50,11 @@ form_data *user_get_field_value(user *self, char *field_name) {
 
 void *user_ctor(user *self) {
 	((void_fun) (klass_of(self)->super->ctor))(self);
-	(BASE(self))->field_count = 5;
+	fprintf(cgiOut,"<h1 style='color:red;'>%d</h1>" , user_klass->field_numbers);
+	(BASE(self))->field_count = user_klass->field_numbers;
 	(BASE(self))->current = 0;
-	(BASE(self))->form_datas = (form_data **) malloc(sizeof(form_data *) * 5);
-	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * 5);
+	(BASE(self))->form_datas = (form_data **) malloc(sizeof(form_data *) * user_klass->field_numbers);
+	(BASE(self))->field_tables = (char **) malloc(sizeof(char *) * user_klass->field_numbers);
 	return self;
 }
 

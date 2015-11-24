@@ -22,6 +22,7 @@ void base_init(void) {
 		base_klass->init = NULL;
 		base_klass->super = NULL;
 		base_klass->class_name = "base_class";
+		base_klass->field_numbers = 0;
 		base_klass->size = sizeof(base);
 		base_klass->ctor = base_ctor;
 		base_klass->dtor = base_dtor;

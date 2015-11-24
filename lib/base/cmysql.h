@@ -13,13 +13,14 @@
 #include <mysql.h>
 #include "../oop/lw_new.h"
 
-typedef struct _tableField tableField;
 //存储数据库表结构
-struct _tableField {
+struct _table_field {
 	char *field_name;
 	int field_type;
 	int field_length;
 };
+
+typedef struct _table_field tableField;
 
 int getTableFields(const char *table, tableField ***table_field);
 

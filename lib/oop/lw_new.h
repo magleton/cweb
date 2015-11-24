@@ -13,6 +13,7 @@ struct _klass_info {
 	klass_info *super;
 	char *class_name;
 	size_t size;
+	int field_numbers;
 	void *ctor;
 	void *dtor;
 };

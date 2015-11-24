@@ -31,15 +31,16 @@ int getTableFields(const char *table_name, tableField ***table_field) {
 		int i = 0;
 		while (field = mysql_fetch_field(result)) {
 			//fprintf(cgiOut, "field_cnt= %d Field =%s Type=%d Length=%ld<br/>", field_cnt , field->name, field->type, field->length);
-			arrayField[i] = (tableField *) malloc(sizeof(tableField) * 1);
+			arrayField[i] = (tableField *) malloc(sizeof(tableField));
 			arrayField[i]->field_name = (char *) malloc(
 					sizeof(char) * (sizeof(field->name) + 1));
 			strcpy(arrayField[i]->field_name, field->name);
 			arrayField[i]->field_type = field->type;
-			arrayField[i]->field_length = (int) field->length;
+			arrayField[i]->field_length = field->length;
 			i++;
 		}
 	}
+	fprintf(cgiOut, "%d", field_cnt);
 	*table_field = arrayField;
 	return field_cnt;
 }
@@ -51,8 +52,8 @@ MYSQL *initMysql() {
 		return NULL;
 	}
 	if (mysql_real_connect(conn, CMYSQL_HOST, CMYSQL_USERNAME, CMYSQL_PWD,
-			CMYSQL_DBNAME, 0,
-			NULL, 0) == NULL) {
+	CMYSQL_DBNAME, 0,
+	NULL, 0) == NULL) {
 		return NULL;
 	}
 	return conn;
@@ -87,9 +88,8 @@ MYSQL * executeQueryWithResult(char *sql) {
 }
 
 //显示错误
-void finish_with_error(MYSQL *con)
-{
-  fprintf(cgiOut, "%s\n", mysql_error(con));
-  mysql_close(con);
-  exit(1);
+void finish_with_error(MYSQL *con) {
+	fprintf(cgiOut, "%s\n", mysql_error(con));
+	mysql_close(con);
+	exit(1);
 }

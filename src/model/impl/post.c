@@ -16,6 +16,7 @@ void post_init(void) {
 		memcpy(post_klass, base_klass, sizeof(klass_info));
 		post_klass->super = base_klass;
 		post_klass->class_name = "post_klass";
+		user_klass->field_numbers = 3;
 		post_klass->size = sizeof(post);
 		post_klass->ctor = post_ctor;
 		post_klass->dtor = post_dtor;
