@@ -66,16 +66,24 @@ static void regUser() {
 						table_field[i]->field_length);
 			}
 		}
-		char fileName[200] = {0};
-		char errorMsg[200] = {0};
-		uploadFile(fileName,errorMsg);
-		fprintf(cgiOut, "<div style='color:red'>fileName = %s</div>", fileName);
+		char fileName[200] = { 0 };
+		char errorMsg[200] = { 0 };
+		int hint = -1;
+		hint = uploadFile(fileName, errorMsg);
+		if (hint != 0) {
+			fprintf(cgiOut,
+					"<div style='color:red'>fileName = %s Failed to upload , error_msg = %s , hint=%d</div>",
+					fileName, errorMsg, hint);
+		} else {
+			fprintf(cgiOut,
+					"<div style='color:red'>%s has been uploaded!</div>",
+					fileName);
+		}
 		snprintf(created_time, sizeof(created_time), "%ld", time(NULL));
 		/*user_set_field_value(user1, "username", 0, "", FIELD_STRING,
 		 FIELD_INSERT);*/
 		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING, FIELD_NORMAL);
-		user_set_field_value(user1, "id", 1, "1", FIELD_STRING,
-				FIELD_SELECT);
+		user_set_field_value(user1, "id", 1, "1", FIELD_STRING, FIELD_SELECT);
 		/*user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
 		 FIELD_INSERT);*/
 		//user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,

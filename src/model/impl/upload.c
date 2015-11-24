@@ -1,5 +1,5 @@
 #include "../interface/upload.h"
-char * uploadFile(char *file_name, char *error_msg) {
+int uploadFile(char *file_name, char *error_msg) {
 	cgiFilePtr source_file;
 	int targetFile;
 	mode_t mode;
@@ -41,7 +41,7 @@ char * uploadFile(char *file_name, char *error_msg) {
 	if (targetFile < 0) {
 		//fprintf(cgiOut, "could not create the new file%s", fileNameOnServer);
 		char tmpStr[200] = { 0 };
-		sprintf(tmpStr, "could not create the new file%s", fileNameOnServer);
+		sprintf(tmpStr, "could not create the new file %s", fileNameOnServer);
 		strcpy(error_msg, tmpStr);
 		goto FAIL;
 	}
@@ -56,9 +56,9 @@ char * uploadFile(char *file_name, char *error_msg) {
 	goto END;
 	FAIL:
 	//fprintf(cgiOut, "%s", "Failed to upload");
-	return "fail";
+	return 1;
 	END:
 	//fprintf(cgiOut, "%s has been uploaded", fileNameOnServer);
 	strcpy(file_name, fileName);
-	return "success";
+	return 0;
 }

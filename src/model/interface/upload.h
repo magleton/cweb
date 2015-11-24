@@ -20,6 +20,6 @@
 
 #define BufferLen 1024
 
-char * uploadFile(char *file_name , char  *error_msg);
+int uploadFile(char *file_name , char  *error_msg);
 
 #endif /* SRC_MODEL_IMPL_UPLOAD_H_ */
