@@ -7,9 +7,10 @@
 </head>
 <body>
 <h1>用户注册</h1>
-<form action="login.cgi?action=reguser" method="post">
+<form action="login.cgi?action=reguser" method="post"  enctype="multipart/form-data">
 	<div><span>用户名 : </span><span><input type="text" name="username" /></span></div>
 	<div><span>密码  : </span><span><input type="password" name="pwd" /></span></div>
+	<div><input type="file" name="file" value="" /></div>
 	</div>
 	<input type="hidden" name="action" value="reguser"/>
 	<div><input type="submit" name="btn" value="注册"/></div>

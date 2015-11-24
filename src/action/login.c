@@ -11,6 +11,7 @@
 #include "../model/interface/user.h"
 #include "../model/interface/post.h"
 #include "../model/interface/base.h"
+#include "../model/interface/upload.h"
 
 static void regUser(); //用户注册
 static void login(); //用户登录
@@ -65,7 +66,10 @@ static void regUser() {
 						table_field[i]->field_length);
 			}
 		}
-		//fprintf(cgiOut, "<div style='color:red'>%s</div>", tfloat);
+		char fileName[200] = {0};
+		char errorMsg[200] = {0};
+		uploadFile(fileName,errorMsg);
+		fprintf(cgiOut, "<div style='color:red'>fileName = %s</div>", fileName);
 		snprintf(created_time, sizeof(created_time), "%ld", time(NULL));
 		/*user_set_field_value(user1, "username", 0, "", FIELD_STRING,
 		 FIELD_INSERT);*/

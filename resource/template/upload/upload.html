@@ -1,0 +1,16 @@
+<html>
+<head>
+<title><TMPL_var name = "title"></title>
+<link rel="stylesheet" href="../resource/css/style.css" type="text/css"/>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script type="text/javascript" src="../resource/js/main.js"></script>
+</head>
+<body>
+<h1>上传文件</h1>
+<form action="upload.cgi" method="post" enctype="multipart/form-data" target="_blank">
+	<div><input type="file" name="file" value="" /></div>
+	<div><input type="submit" name="btn" value="submit"/></div>
+</form>
+<div><TMPL_VAR name="msg" /></div>
+</body>
+</html>
