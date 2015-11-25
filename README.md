@@ -27,7 +27,10 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 * 安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http)
 [参考](https://cygwin.com/mirrors.html).
 
-* 配置Apache,打开httpd.conf,找到相应的章节，修改为下面的格式
+
+* 配置Apache,打开httpd.conf
+* 找到 LoadModule cgi_module modules/mod_cgi.so ， 并去掉前面的#号.
+* 找到下面相应的章节，修改为下面的格式
 ```
 <IfModule alias_module>
     ScriptAlias /cgi-bin/  "这里配置为DocumentRoot的值"
@@ -37,6 +40,9 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
     Options +ExecCGI
     Require all granted
 </Directory>
+<IfModule mime_module>
+    AddHandler cgi-script .cgi
+</IfModule>
 ```
 * 在Cygwin里面安装crypt和libmysqlclient-devel
 
