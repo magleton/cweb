@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-#include "../lib/cgic/cgic.h"
-#include "../lib/ctemplate/ctemplate.h"
+#include "../../lib/cgic/cgic.h"
+#include "../../lib/ctemplate/ctemplate.h"
 int cgiMain() {
 	cgiHeaderContentType("text/html;charset=gbk");
 	int n, f;
@@ -9,7 +9,8 @@ int cgiMain() {
 	TMPL_varlist *mainlist, *vl;
 	TMPL_loop *loop;
 	TMPL_loop *persons;
-	loop = 0;
+	loop = NULL;
+	persons = NULL;
 	f = 1;
 	for (n = 1; n < 11; n++) {
 		sprintf(txt1, "%d", n);
