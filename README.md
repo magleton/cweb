@@ -24,10 +24,10 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 ```
 
 #Windows环境配置
-*安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http)
-参考[This link](https://cygwin.com/mirrors.html).
+* 安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http)
+[参考](https://cygwin.com/mirrors.html).
 
-*配置Apache,打开httpd.conf,找到相应的章节，修改为下面的格式
+* 配置Apache,打开httpd.conf,找到相应的章节，修改为下面的格式
 ```
 <IfModule alias_module>
     ScriptAlias /cgi-bin/ "I:/WAMP/wwwroot/"
@@ -38,7 +38,7 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
     Require all granted
 </Directory>
 ```
-*在Cygwin里面安装crypt和libmysqlclient-devel
+* 在Cygwin里面安装crypt和libmysqlclient-devel
 
 
 #编译命令
