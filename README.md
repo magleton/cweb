@@ -30,9 +30,9 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 * 配置Apache,打开httpd.conf,找到相应的章节，修改为下面的格式
 ```
 <IfModule alias_module>
-    ScriptAlias /cgi-bin/ __"I:/WAMP/wwwroot/"__ **这里配置为DocumentRoot的值**
+    ScriptAlias /cgi-bin/  "这里配置为DocumentRoot的值"
 </IfModule>
-<Directory __"I:/WAMP/wwwroot/"__ **这里配置为DocumentRoot的值**>
+<Directory "这里配置为DocumentRoot的值">
     AllowOverride None
     Options +ExecCGI
     Require all granted
