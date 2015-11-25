@@ -28,7 +28,7 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 [参考](https://cygwin.com/mirrors.html).
 
 
-* 配置Apache,打开httpd.conf
+* 配置Apache,打开httpd.conf. __注意：Apache不能安装为服务__[下载绿色版Apache](http://www.apachelounge.com/download/)
 * 找到 LoadModule cgi_module modules/mod_cgi.so ， 并去掉前面的#号.
 * 找到下面相应的章节，修改为下面的格式
 ```
