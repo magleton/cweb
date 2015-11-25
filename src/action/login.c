@@ -82,19 +82,20 @@ static void regUser() {
 		snprintf(created_time, sizeof(created_time), "%ld", time(NULL));
 		/*user_set_field_value(user1, "username", 0, "", FIELD_STRING,
 		 FIELD_INSERT);*/
-		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING, FIELD_NORMAL);
+		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING, FIELD_INSERT);
 		user_set_field_value(user1, "id", 1, "1", FIELD_STRING, FIELD_SELECT);
-		/*user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
-		 FIELD_INSERT);*/
-		//user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,
-		//FIELD_INSERT);
+		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
+		 FIELD_INSERT);
+		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,
+		FIELD_INSERT);
+		insertData(BASE(user1), "user");
 		/*user_get_field_value(user1, "pwd");
 		 user_get_field_value(user1, "username");
 		 user_get_field_value(user1, "salt");
 		 user_get_field_value(user1, "created_time");
 		 user_get_field_value(user1, "updated_time");*/
 		//user_id = insertData(BASE(user1), "user");  //插入操作
-		deleteData(BASE(user1), "user"); //删除操作
+		//deleteData(BASE(user1), "user"); //删除操作
 		//selectData(BASE(user1) , "user" , 1 , 1); //选择操作
 		//updateData(BASE(user1) , "user" , 1 ,1); //选择操作
 		//tostring(user_id_str, user_id);
