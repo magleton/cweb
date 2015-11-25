@@ -1,6 +1,6 @@
 # cweb 是一个使用C语言开发的CGI WEB应用。使用mysql作为数据库，基于Ubuntu开发。
 
-#环境配置
+#Linux环境配置
 * nginx:
 ```
 location ~ .*\.cgi$ {
@@ -22,6 +22,24 @@ sudo apt-get install fcgiwrap
 ```
 spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 ```
+
+#Windows环境配置
+*安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http)
+参考[This link](https://cygwin.com/mirrors.html).
+
+*配置Apache,打开httpd.conf,找到相应的章节，修改为下面的格式
+```
+<IfModule alias_module>
+    ScriptAlias /cgi-bin/ "I:/WAMP/wwwroot/"
+</IfModule>
+<Directory "I:/WAMP/wwwroot">
+    AllowOverride None
+    Options +ExecCGI
+    Require all granted
+</Directory>
+```
+*在Cygwin里面安装crypt和libmysqlclient-devel
+
 
 #编译命令
 * 没有使用MYSQL的编译命令
