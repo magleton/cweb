@@ -19,10 +19,14 @@ static void login(); //用户登录
 static void loginIndex();
 
 int cgiMain() {
-	cgiHeaderContentType("text/html;charset=utf-8");
 	int action_len = 0;
-	session_start("/home/macro/wwwroot/cweb/resource/upload/");
+
+
+	session_start("../resource/upload/");
+	//cgiHeaderContentType("text/html;charset=utf-8");
 	cgiFormStringSpaceNeeded("action", &action_len);
+	/*fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
+					"sdafasfdsa");*/
 	char *action = (char *) malloc(sizeof(char) * (action_len + 1));
 	cgiFormString("action", action, 200);
 	if (strcmp(action, "reguser") == 0) { // 注册
@@ -38,6 +42,12 @@ int cgiMain() {
 
 //默认首页
 static void loginIndex() {
+	//session_get("USERNAME");
+	cgiHeaderContentType("text/html;charset=utf-8");
+	fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
+			session_get("USERNAME"));
+	/*fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
+				"sdafasfdsa");*/
 	TMPL_write("../resource/template/login/index.html", 0, 0, 0, cgiOut,
 			cgiOut);
 }
@@ -87,9 +97,9 @@ static void regUser() {
 		user_set_field_value(user1, "pwd", 0, "", FIELD_STRING, FIELD_INSERT);
 		user_set_field_value(user1, "id", 1, "1", FIELD_STRING, FIELD_SELECT);
 		user_set_field_value(user1, "created_time", 1, created_time, FIELD_INT,
-		 FIELD_INSERT);
+				FIELD_INSERT);
 		user_set_field_value(user1, "updated_time", 1, updated_time, FIELD_INT,
-		FIELD_INSERT);
+				FIELD_INSERT);
 		insertData(BASE(user1), "user");
 		/*user_get_field_value(user1, "pwd");
 		 user_get_field_value(user1, "username");
@@ -135,6 +145,7 @@ static void regUser() {
 static void login() {
 	TMPL_varlist *varlist;
 	varlist = TMPL_add_var(0, 0);
+	cgiHeaderContentType("text/html;charset=utf-8");
 	if (cgiFormSubmitClicked("btn") == cgiFormSuccess) { //处理提交
 		char username[20];
 		char pwd[20];
@@ -145,17 +156,17 @@ static void login() {
 		cgiFormString("pwd", pwd, 20);
 		cgiFormString("content", content, content_length);
 		// 登录验证通过，设置 session 数据后重定向浏览器
-		fprintf(cgiOut , "<h1 style='color:red;'>%s</h1>" , g_session_data->session_datadir);
-		session_set("USERNAME", "aaaaaaaaa");
+		//fprintf(cgiOut , "<h1 style='color:red;'>%s</h1>" , g_session_data->session_datadir);
+		session_set("USERNAME", username);
 		session_write_close();
 		char insertSql[1024] = { 0 };
 		/*sprintf(insertSql,
-				"INSERT INTO `post` (`keywords`, `content`) VALUES ('%s', '%s');",
-				username, content);*/
+		 "INSERT INTO `post` (`keywords`, `content`) VALUES ('%s', '%s');",
+		 username, content);*/
 		//executeQuery(insertSql);
 		/*varlist = TMPL_add_var(varlist, "msg", "已经提交了哦！！", 0);
-		varlist = TMPL_add_var(varlist, "username", username, 0);
-		varlist = TMPL_add_var(varlist, "pwd", pwd, 0);*/
+		 varlist = TMPL_add_var(varlist, "username", username, 0);
+		 varlist = TMPL_add_var(varlist, "pwd", pwd, 0);*/
 		free(content);
 	} else {
 		varlist = TMPL_add_var(varlist, "msg", "初始化", 0);

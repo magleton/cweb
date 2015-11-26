@@ -39,8 +39,8 @@ int session_start(const char* datadir) {
 	// 根据 cookie 状态确定是创建新 session 还是载入现有的 session
 	result = cgiCookieString("SESSION_ID", cookie_session_id, 33);
 #ifdef DEBUG
-	fprintf(stderr, "cgiCookieString() result: %u\n", result);
-	fprintf(stderr, "cookie_session_id: %s\n", cookie_session_id);
+	fprintf(cgiOut, "cgiCookieString() result: %u\n", result);
+	fprintf(cgiOut, "cookie_session_id: %s\n", cookie_session_id);
 #endif
 
 	if (result != cgiFormSuccess) {
@@ -100,7 +100,7 @@ int session_write_close() {
 	fclose(fp);
 
 #ifdef DEBUG
-	session_dump(stderr);
+	session_dump(cgiOut);
 	fprintf(cgiOut, "session_write_close() END -->\n");
 #endif
 
@@ -123,8 +123,8 @@ int session_destroy() {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "session_destroy()\n");
-	session_dump(stderr);
+	fprintf(cgiOut, "session_destroy()\n");
+	session_dump(cgiOut);
 #endif
 
 	// 删除 session 数据文件
@@ -149,7 +149,7 @@ int session_set(const char* name, const char* string) {
 	size_t buffer_size;
 
 #ifdef DEBUG
-	fprintf(stderr, "session_set(), session file:%s\n", g_session_data->session_filename);
+	fprintf(cgiOut, "session_set(), session file:%s\n", g_session_data->session_filename);
 #endif
 
 	for (i = 0; i < g_session_data->max_index; i++) {
@@ -197,7 +197,7 @@ const char* session_get(const char* name) {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "session_get(), session file:%s\n", g_session_data->session_filename);
+	fprintf(cgiOut, "session_get(), session file:%s\n", g_session_data->session_filename);
 #endif
 
 	for (i = 0; i < g_session_data->max_index; i++) {
@@ -229,7 +229,7 @@ int session_unset(const char* name) {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "session_unset(), session file:%s\n", g_session_data->session_filename);
+	fprintf(cgiOut, "session_unset(), session file:%s\n", g_session_data->session_filename);
 #endif
 
 	for (i = 0; i < g_session_data->max_index; i++) {
@@ -309,7 +309,7 @@ int sess_create() {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "sess_create()\n");
+	fprintf(cgiOut, "sess_create()\n");
 #endif
 
 	// 构造 session id
@@ -355,7 +355,7 @@ int sess_load(const char* session_id, const char* datadir) {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "sess_load() BEGIN -->\n");
+	fprintf(cgiOut, "sess_load() BEGIN -->\n");
 #endif
 
 	// 构造 session_data
@@ -366,7 +366,7 @@ int sess_load(const char* session_id, const char* datadir) {
 			g_session_data->session_datadir, g_session_data->session_id);
 
 #ifdef DEBUG
-	fprintf(stderr, "sess_load(), session file:%s\n", g_session_data->session_filename);
+	fprintf(cgiOut, "sess_load(), session file:%s\n", g_session_data->session_filename);
 #endif
 
 	fp = fopen(g_session_data->session_filename, "r");
@@ -401,7 +401,7 @@ int sess_load(const char* session_id, const char* datadir) {
 		if (g_session_data->count >= g_session_data->max_index) {
 			g_session_data->max_index += 10;
 #ifdef DEBUG
-			fprintf(stderr, "* items count: %ld, max_index grow up to: %ld\n",
+			fprintf(cgiOut, "* items count: %ld, max_index grow up to: %ld\n",
 					g_session_data->count,
 					g_session_data->max_index);
 #endif
@@ -422,12 +422,12 @@ int sess_load(const char* session_id, const char* datadir) {
 		if ((index % 2) == 0) {
 			tmp = g_session_data->items[g_session_data->count].name;
 #ifdef DEBUG
-			fprintf(stderr, "read name:");
+			fprintf(cgiOut, "read name:");
 #endif
 		} else {
 			tmp = g_session_data->items[g_session_data->count].string;
 #ifdef DEBUG
-			fprintf(stderr, "read string:");
+			fprintf(cgiOut, "read string:");
 #endif
 		}
 		if (buffer[strlen(buffer) - 1] == '\n') {
@@ -435,7 +435,7 @@ int sess_load(const char* session_id, const char* datadir) {
 		}
 		tmp = sess_unserialize(buffer);
 #ifdef DEBUG
-		fprintf(stderr, "%s\n", tmp);
+		fprintf(cgiOut, "%s\n", tmp);
 #endif
 		if ((index % 2) == 0) {
 			g_session_data->items[g_session_data->count].name = tmp;
@@ -458,11 +458,11 @@ int sess_load(const char* session_id, const char* datadir) {
 	}
 
 #ifdef DEBUG
-	session_dump(stderr);
+	session_dump(cgiOut);
 #endif
 
 #ifdef DEBUG
-	fprintf(stderr, "sess_load() END -->\n");
+	fprintf(cgiOut, "sess_load() END -->\n");
 #endif
 
 	return 0;
@@ -535,7 +535,7 @@ char* sess_make_session_id() {
 	char* remote_port = NULL;
 	size_t length = 0;
 
-	remote_port = getenv("REMOTE_PORT");
+	//remote_port = getenv("REMOTE_PORT");
 	length = strlen(cgiRemoteAddr);
 	//length += strlen(cgiUserAgent);
 	length += strlen(cgiRemoteHost);
@@ -555,7 +555,9 @@ char* sess_make_session_id() {
 
 	session_id = sess_md5_calc(buffer);
 	free(buffer);
-	fprintf(cgiOut , "<div style='color:yellow;'>%s</div>" , remote_port);
+#ifdef DEBUG
+	fprintf(cgiOut, "<div style='color:yellow;'>%s</div>", remote_port);
+#endif
 	return session_id;
 }
 
@@ -570,12 +572,14 @@ char* sess_md5_calc(const char* string) {
 	MD5_CTX md5ctx;
 	char* buffer = (char*) malloc(33 * sizeof(char));
 	memset(buffer, 0, 33 * sizeof(char));
-	strncpy(buffer , string , sizeof(char)*33);
+	strncpy(buffer, string, sizeof(char) * 33);
 	MD5Init(&md5ctx);
 	//MD5Data(string, strlen(string), buffer);
 	MD5Update(&md5ctx, buffer, strlen(buffer));
 	//MD5Final(&md5ctx, decrypt);
-	fprintf(cgiOut , "加密前:%s\n加密后16位:", string);
+#ifdef DEBUG1
+	fprintf(cgiOut, "加密前:%s\n加密后16位:", buffer);
+#endif
 	return buffer;
 }
 
