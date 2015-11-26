@@ -9,7 +9,7 @@
 #include <string.h>
 #include "../../lib/cgic/cgic.h"
 #include "../../lib/ctemplate/ctemplate.h"
-#include "../../lib/base/base.h"
+#include "../model/interface/base.h"
 #include "../../lib/oop/lw_new.h"
 #include "../model/interface/user.h"
 int cgiMain() {

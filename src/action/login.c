@@ -12,6 +12,7 @@
 #include "../model/interface/post.h"
 #include "../model/interface/base.h"
 #include "../model/interface/upload.h"
+#include "../model/interface/session.h"
 
 static void regUser(); //用户注册
 static void login(); //用户登录
@@ -20,6 +21,7 @@ static void loginIndex();
 int cgiMain() {
 	cgiHeaderContentType("text/html;charset=utf-8");
 	int action_len = 0;
+	session_start("/tmp/");
 	cgiFormStringSpaceNeeded("action", &action_len);
 	char *action = (char *) malloc(sizeof(char) * (action_len + 1));
 	cgiFormString("action", action, 200);
@@ -142,14 +144,17 @@ static void login() {
 		cgiFormString("username", username, 20);
 		cgiFormString("pwd", pwd, 20);
 		cgiFormString("content", content, content_length);
+		// 登录验证通过，设置 session 数据后重定向浏览器
+					session_set("USERNAME", "aaaaaaaaa");
+					session_write_close();
 		char insertSql[1024] = { 0 };
-		sprintf(insertSql,
+		/*sprintf(insertSql,
 				"INSERT INTO `post` (`keywords`, `content`) VALUES ('%s', '%s');",
-				username, content);
+				username, content);*/
 		//executeQuery(insertSql);
-		varlist = TMPL_add_var(varlist, "msg", "已经提交了哦！！", 0);
+		/*varlist = TMPL_add_var(varlist, "msg", "已经提交了哦！！", 0);
 		varlist = TMPL_add_var(varlist, "username", username, 0);
-		varlist = TMPL_add_var(varlist, "pwd", pwd, 0);
+		varlist = TMPL_add_var(varlist, "pwd", pwd, 0);*/
 		free(content);
 	} else {
 		varlist = TMPL_add_var(varlist, "msg", "初始化", 0);
