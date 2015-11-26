@@ -69,7 +69,7 @@ int session_write_close() {
 	}
 
 #ifdef DEBUG
-	fprintf(stderr, "session_write_close() <-- BEGIN\n");
+	fprintf(cgiOut, "session_write_close() <-- BEGIN\n");
 #endif
 
 	fp = fopen(g_session_data->session_filename, "w");
@@ -101,7 +101,7 @@ int session_write_close() {
 
 #ifdef DEBUG
 	session_dump(stderr);
-	fprintf(stderr, "session_write_close() END -->\n");
+	fprintf(cgiOut, "session_write_close() END -->\n");
 #endif
 
 	// 释放 session 占用的资源
@@ -531,15 +531,13 @@ void sess_free_resource() {
  */
 char* sess_make_session_id() {
 	char* buffer = NULL;
-	char* session_id =
-	NULL;
-	char* remote_port =
-	NULL;
+	char* session_id = NULL;
+	char* remote_port = NULL;
 	size_t length = 0;
 
 	remote_port = getenv("REMOTE_PORT");
 	length = strlen(cgiRemoteAddr);
-	length += strlen(cgiUserAgent);
+	//length += strlen(cgiUserAgent);
 	length += strlen(cgiRemoteHost);
 	if (remote_port != NULL) {
 		length += strlen(remote_port);
@@ -549,7 +547,7 @@ char* sess_make_session_id() {
 	memset(buffer, 0, (length + 1) * sizeof(char));
 
 	strcpy(buffer, cgiRemoteAddr);
-	strcat(buffer, cgiUserAgent);
+//	strcat(buffer, cgiUserAgent);
 	strcat(buffer, cgiRemoteHost);
 	if (remote_port != NULL) {
 		strcat(buffer, remote_port);
@@ -557,6 +555,7 @@ char* sess_make_session_id() {
 
 	session_id = sess_md5_calc(buffer);
 	free(buffer);
+	fprintf(cgiOut , "<div style='color:yellow;'>%s</div>" , remote_port);
 	return session_id;
 }
 

@@ -1,4 +1,4 @@
-cgi-bin/*
+cgi-bin/*.cgi
 resource/upload
 .cproject
 .project

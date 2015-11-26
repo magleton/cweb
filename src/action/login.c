@@ -21,7 +21,7 @@ static void loginIndex();
 int cgiMain() {
 	cgiHeaderContentType("text/html;charset=utf-8");
 	int action_len = 0;
-	session_start("/tmp/");
+	session_start("/home/macro/wwwroot/cweb/resource/upload/");
 	cgiFormStringSpaceNeeded("action", &action_len);
 	char *action = (char *) malloc(sizeof(char) * (action_len + 1));
 	cgiFormString("action", action, 200);
@@ -145,8 +145,9 @@ static void login() {
 		cgiFormString("pwd", pwd, 20);
 		cgiFormString("content", content, content_length);
 		// 登录验证通过，设置 session 数据后重定向浏览器
-					session_set("USERNAME", "aaaaaaaaa");
-					session_write_close();
+		fprintf(cgiOut , "<h1 style='color:red;'>%s</h1>" , g_session_data->session_datadir);
+		session_set("USERNAME", "aaaaaaaaa");
+		session_write_close();
 		char insertSql[1024] = { 0 };
 		/*sprintf(insertSql,
 				"INSERT INTO `post` (`keywords`, `content`) VALUES ('%s', '%s');",
