@@ -24,12 +24,12 @@ spawn-fcgi -f /usr/sbin/fcgiwrap -p 8080
 ```
 
 #Windows环境配置
-* 安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http)
-[参考](https://cygwin.com/mirrors.html).
+* 安装Cgywin,镜像可以选择 mirrors.neusoft.edu.cn(http)或者mirrors.ustc.edu.cn(http).或者<a href="https://cygwin.com/mirrors.html" target="_blank">参考</a>
 
+* 配置Apache,打开httpd.conf. __注意：Apache不能被安装为服务，只能在命令行启动__.<a href="(http://www.apachelounge.com/download/"  target="_blank">下载绿色版Apache</a>
 
-* 配置Apache,打开httpd.conf. __注意：Apache不能安装为服务__[下载绿色版Apache](http://www.apachelounge.com/download/)
 * 找到 LoadModule cgi_module modules/mod_cgi.so ， 并去掉前面的#号.
+
 * 找到下面相应的章节，修改为下面的格式
 ```
 <IfModule alias_module>
