@@ -328,7 +328,7 @@ int sess_create() {
 
 	// 写入 cookie ， 注意 ： 在开发环境下，cgiServerName可能更配置有关系，导致COOKIE不能被获取
 #ifdef DEVELOPMENT
-	cgiHeaderCookieSetString("CWEB_SESSION_ID", g_session_data->session_id, 900, "/","");
+	cgiHeaderCookieSetString("CWEB_SESSION_ID", g_session_data->session_id, 900, "","");
 #else
 	cgiHeaderCookieSetString("CWEB_SESSION_ID", g_session_data->session_id, 900,
 			"/", cgiServerName);
@@ -576,7 +576,7 @@ char* sess_md5_calc(const char* encrypt) {
 	char* buffer = (char*) malloc(33 * sizeof(char));
 	memset(buffer, '\0', 33);
 	unsigned char decrypt[16];
-	char tmp_buffer[2] = { 0 };
+	char tmp_buffer[4] = { 0 };
 	MD5Init(&md5ctx);
 	int i, k = 0;
 	MD5Update(&md5ctx, (unsigned char *) encrypt,
