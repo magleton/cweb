@@ -37,12 +37,11 @@ int session_start(const char* datadir) {
 	sess_init(datadir);
 
 	// 根据 cookie 状态确定是创建新 session 还是载入现有的 session
-	result = cgiCookieString("SESSION_ID", cookie_session_id, 33);
+	result = cgiCookieString("CWEB_SESSION_ID", cookie_session_id, 33);
 #ifdef DEBUG
 	fprintf(cgiOut, "cgiCookieString() result: %u\n", result);
 	fprintf(cgiOut, "cookie_session_id: %s\n", cookie_session_id);
 #endif
-
 	if (result != cgiFormSuccess) {
 		// 没有找到有效的 cookie session_id，创建一个新 session
 		result = sess_create();
@@ -196,11 +195,12 @@ const char* session_get(const char* name) {
 		return NULL;
 	}
 
-#ifdef DEBUG
-	fprintf(cgiOut, "session_get(), session file:%s\n", g_session_data->session_filename);
+#ifdef DEBUG1
+	fprintf(cgiOut, "session_get(), session file:%s<br/>name = %s , max_index = %ld", g_session_data->session_filename , name,g_session_data->max_index);
 #endif
 
 	for (i = 0; i < g_session_data->max_index; i++) {
+		//fprintf(cgiOut, "g_session_data->items[%ld].name = %s", i , g_session_data->session_filename);
 		if (g_session_data->items[i].name == NULL) {
 			continue;
 		}
@@ -326,10 +326,13 @@ int sess_create() {
 	}
 	g_session_data->max_index = init_index;
 
-	// 写入 cookie
-	cgiHeaderCookieSetString("SESSION_ID", g_session_data->session_id, 900, "/",
-			cgiServerName);
-
+	// 写入 cookie ， 注意 ： 在开发环境下，cgiServerName可能更配置有关系，导致COOKIE不能被获取
+#ifdef DEVELOPMENT
+	cgiHeaderCookieSetString("CWEB_SESSION_ID", g_session_data->session_id, 900, "/","");
+#else
+	cgiHeaderCookieSetString("CWEB_SESSION_ID", g_session_data->session_id, 900,
+			"/", cgiServerName);
+#endif
 	return 0;
 }
 
@@ -487,7 +490,7 @@ char* sess_get_filename(const char* datadir, const char* session_id) {
 	buffer_size = (strlen(datadir) + strlen(g_session_filename_prefix)
 			+ strlen(session_filename)) * sizeof(char);
 
-	result = (char*) malloc(buffer_size);
+	result = (char*) malloc(buffer_size + 1);
 	memset(result, 0, buffer_size);
 	strcpy(result, datadir);
 	strcat(result, g_session_filename_prefix);
@@ -537,7 +540,7 @@ char* sess_make_session_id() {
 
 	//remote_port = getenv("REMOTE_PORT");
 	length = strlen(cgiRemoteAddr);
-	//length += strlen(cgiUserAgent);
+	length += strlen(cgiUserAgent);
 	length += strlen(cgiRemoteHost);
 	if (remote_port != NULL) {
 		length += strlen(remote_port);
@@ -547,7 +550,7 @@ char* sess_make_session_id() {
 	memset(buffer, 0, (length + 1) * sizeof(char));
 
 	strcpy(buffer, cgiRemoteAddr);
-//	strcat(buffer, cgiUserAgent);
+	strcat(buffer, cgiUserAgent);
 	strcat(buffer, cgiRemoteHost);
 	if (remote_port != NULL) {
 		strcat(buffer, remote_port);
@@ -568,17 +571,23 @@ char* sess_make_session_id() {
  *
  * @return char* 保存 md5 hash 的缓冲区指针
  */
-char* sess_md5_calc(const char* string) {
+char* sess_md5_calc(const char* encrypt) {
 	MD5_CTX md5ctx;
 	char* buffer = (char*) malloc(33 * sizeof(char));
-	memset(buffer, 0, 33 * sizeof(char));
-	strncpy(buffer, string, sizeof(char) * 33);
+	memset(buffer, '\0', 33);
+	unsigned char decrypt[16];
+	char tmp_buffer[2] = { 0 };
 	MD5Init(&md5ctx);
-	//MD5Data(string, strlen(string), buffer);
-	MD5Update(&md5ctx, buffer, strlen(buffer));
-	//MD5Final(&md5ctx, decrypt);
-#ifdef DEBUG1
-	fprintf(cgiOut, "加密前:%s\n加密后16位:", buffer);
+	int i, k = 0;
+	MD5Update(&md5ctx, (unsigned char *) encrypt,
+			strlen((unsigned char *) encrypt));
+	MD5Final(&md5ctx, decrypt);
+	for (i = 4; i < 12; i++) {
+		k = snprintf(tmp_buffer, sizeof(tmp_buffer), "%02x", decrypt[i]);
+		strncat(buffer, tmp_buffer, k);
+	}
+#ifdef DEBUG
+	fprintf(cgiOut, "加密前:%s<br/>加密后:%s<br/>", encrypt , buffer);
 #endif
 	return buffer;
 }

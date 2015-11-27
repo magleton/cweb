@@ -21,11 +21,11 @@ static void loginIndex();
 int cgiMain() {
 	int action_len = 0;
 
-
 	session_start("../resource/upload/");
 	//cgiHeaderContentType("text/html;charset=utf-8");
+	//cgiHeaderContentType("text/html;charset=utf-8");
 	cgiFormStringSpaceNeeded("action", &action_len);
-	/*fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
+/*	fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
 					"sdafasfdsa");*/
 	char *action = (char *) malloc(sizeof(char) * (action_len + 1));
 	cgiFormString("action", action, 200);
@@ -44,8 +44,9 @@ int cgiMain() {
 static void loginIndex() {
 	//session_get("USERNAME");
 	cgiHeaderContentType("text/html;charset=utf-8");
-	fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
-			session_get("USERNAME"));
+	fprintf(cgiOut, "<h1 style='color:green;'>session Data : username = %s , content = %s</h1>",
+			session_get("username"),session_get("content"));
+	fprintf(cgiOut, "<h1 style='color:red;'>%s</h1>",cgiServerName);
 	/*fprintf(cgiOut, "<h1 style='color:green;'>%s</h1>",
 				"sdafasfdsa");*/
 	TMPL_write("../resource/template/login/index.html", 0, 0, 0, cgiOut,
@@ -145,6 +146,7 @@ static void regUser() {
 static void login() {
 	TMPL_varlist *varlist;
 	varlist = TMPL_add_var(0, 0);
+	fprintf(cgiOut, "Pragma: no-cache\n");
 	cgiHeaderContentType("text/html;charset=utf-8");
 	if (cgiFormSubmitClicked("btn") == cgiFormSuccess) { //处理提交
 		char username[20];
@@ -157,7 +159,8 @@ static void login() {
 		cgiFormString("content", content, content_length);
 		// 登录验证通过，设置 session 数据后重定向浏览器
 		//fprintf(cgiOut , "<h1 style='color:red;'>%s</h1>" , g_session_data->session_datadir);
-		session_set("USERNAME", username);
+		session_set("username", username);
+		session_set("content", content);
 		session_write_close();
 		char insertSql[1024] = { 0 };
 		/*sprintf(insertSql,
@@ -167,6 +170,7 @@ static void login() {
 		/*varlist = TMPL_add_var(varlist, "msg", "已经提交了哦！！", 0);
 		 varlist = TMPL_add_var(varlist, "username", username, 0);
 		 varlist = TMPL_add_var(varlist, "pwd", pwd, 0);*/
+
 		free(content);
 	} else {
 		varlist = TMPL_add_var(varlist, "msg", "初始化", 0);
