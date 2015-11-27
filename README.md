@@ -58,10 +58,15 @@ gcc test.c -o test  `mysql_config --cflags --libs`
 ```
 * 最后生成CGI文件的编译命令,开启调试模式
 ```
-gcc -o cgi-bin/login.cgi -DDEBUG src/model/impl/base.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/action/login.c src/model/impl/user.c  lib/base/cmysql.c`mysql_config --libs --cflags`
+gcc -o cgi-bin/login.cgi src/action/login.c src/model/impl/md5.c lib/base/cmysql.c src/model/impl/session.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/model/impl/upload.c src/model/impl/user.c src/model/impl/base.c  `mysql_config --libs --cflags` -DDEBUG
 ```
 
 * 最后生成CGI文件的编译命令
 ```
-gcc -o cgi-bin/login.cgi src/model/impl/base.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/action/login.c src/model/impl/user.c  lib/base/cmysql.c `mysql_config --libs --cflags`
+gcc -o cgi-bin/login.cgi src/action/login.c src/model/impl/md5.c lib/base/cmysql.c src/model/impl/session.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/model/impl/upload.c src/model/impl/user.c src/model/impl/base.c  `mysql_config --libs --cflags`
+```
+
+* 开启session功能，并且没有配置独立**域名**的编译命令
+```
+gcc -o cgi-bin/login.cgi src/action/login.c src/model/impl/md5.c lib/base/cmysql.c src/model/impl/session.c lib/ctemplate/ctemplate.c lib/cgic/cgic.c lib/oop/lw_new.c src/model/impl/upload.c src/model/impl/user.c src/model/impl/base.c  `mysql_config --libs --cflags` -DDEVELOPMENT
 ```
