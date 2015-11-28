@@ -690,8 +690,7 @@ int sess_gc() {
 		last_filename = strcat(last_filename, file->d_name);
 		if (strcmp(last_filename, g_session_data->session_filename) == 0) {
 			//修改session文件的时间属性，让其保持在活跃状态
-			struct utimbuf timebuf =
-					{ actime : time(NULL), modtime : time(NULL) };
+			struct utimbuf timebuf = { actime : time(NULL), modtime : time(NULL) };
 			utime(g_session_data->session_filename, &timebuf);
 #ifdef DEBUG
 			fprintf(cgiOut, "g_session_data->session_filename = %s , last_filename = %s , utime status = %s<br/>", g_session_data->session_filename , last_filename , strerror(errno));
@@ -707,6 +706,7 @@ int sess_gc() {
 		}
 	}
 	closedir(d);
+	free(last_filename);
 	return 0;
 }
 
