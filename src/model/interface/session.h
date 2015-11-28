@@ -11,6 +11,15 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <utime.h>
+#include <dirent.h>
+#include <error.h>
+
 #include "md5.h"
 
 typedef struct {
@@ -54,6 +63,7 @@ char* sess_make_session_id();
 char* sess_md5_calc(const char* string);
 char* sess_serialize(const char* string);
 char* sess_unserialize(const char* string);
+int sess_gc();
 
 #endif /* SRC_MODEL_INTERFACE_SESSION_H_ */
 

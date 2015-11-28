@@ -42,12 +42,14 @@ int session_start(const char* datadir) {
 	fprintf(cgiOut, "cgiCookieString() result: %u\n", result);
 	fprintf(cgiOut, "cookie_session_id: %s\n", cookie_session_id);
 #endif
+
 	if (result != cgiFormSuccess) {
 		// 没有找到有效的 cookie session_id，创建一个新 session
 		result = sess_create();
 	} else {
 		result = sess_load(cookie_session_id, datadir);
 	}
+	sess_gc(); //处理过期session
 	return result;
 }
 
@@ -663,6 +665,49 @@ char* sess_unserialize(const char* string) {
 	strcpy(dest, buffer);
 	free(buffer);
 	return dest;
+}
+
+/**
+ *垃圾session的处理
+ */
+int sess_gc() {
+	time_t current_time = time(NULL);
+	struct stat buf;
+	DIR *d;
+	struct dirent *file;
+	int errno = 0;
+	char *last_filename = (char *)malloc(strlen(g_session_data->session_datadir) + strlen(g_session_data->session_filename) + 1);
+	memset(last_filename , '\0' , strlen(g_session_data->session_datadir) + strlen(g_session_data->session_filename) + 1);
+	if (!(d = opendir(g_session_data->session_datadir))) {
+		fprintf(cgiOut, "error session opendir %s<br/>", g_session_data->session_datadir);
+		return 1;
+	}
+	while ((file = readdir(d)) != NULL) {
+		if (strncmp(file->d_name, ".", 1) == 0) {
+			continue;
+		}
+		last_filename = strcpy(last_filename , g_session_data->session_datadir);
+		last_filename = strcat(last_filename, file->d_name);
+		if (strcmp(last_filename, g_session_data->session_filename) == 0) {
+			//修改session文件的时间属性，让其保持在活跃状态
+			struct utimbuf timebuf =
+					{ actime : time(NULL), modtime : time(NULL) };
+			utime(g_session_data->session_filename, &timebuf);
+#ifdef DEBUG
+			fprintf(cgiOut, "g_session_data->session_filename = %s , last_filename = %s , utime status = %s<br/>", g_session_data->session_filename , last_filename , strerror(errno));
+#endif
+		} else {
+			stat(last_filename, &buf);
+			if (current_time - buf.st_atime > 60) {
+				remove(last_filename);
+			}
+#ifdef DEBUG
+			fprintf(cgiOut, "last_filename = %s   remove status = %s<br/>", last_filename , strerror(errno));
+#endif
+		}
+	}
+	closedir(d);
+	return 0;
 }
 
 /**
