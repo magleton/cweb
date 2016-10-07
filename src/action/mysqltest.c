@@ -2,6 +2,7 @@
 #include "../../lib/ctemplate/ctemplate.h"
 #include "../../lib/oop/lw_new.h"
 #include "../../lib/base/cmysql.h"
+#include <string.h>
 
 int cgiMain() {
 	cgiHeaderContentType("text/html;charset=utf-8");
