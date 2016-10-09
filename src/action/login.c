@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <my_global.h>
-#include <mysql.h>
+#include <mysql/my_global.h>
+#include <mysql/mysql.h>
 #include <time.h>
 #include "../../lib/cgic/cgic.h"
 #include "../../lib/ctemplate/ctemplate.h"

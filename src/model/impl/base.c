@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <my_global.h>
-#include <mysql.h>
+#include <mysql/my_global.h>
+#include <mysql/mysql.h>
 #include <math.h>
 #include "../interface/base.h"
 #include "../../../lib/base/cmysql.h"

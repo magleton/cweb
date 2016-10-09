@@ -9,8 +9,8 @@
 #define LIB_BASE_CMYSQL_H_
 #include <stdio.h>
 #include <stdlib.h>
-#include <my_global.h>
-#include <mysql.h>
+#include <mysql/my_global.h>
+#include <mysql/mysql.h>
 #include "../oop/lw_new.h"
 
 //存储数据库表结构
